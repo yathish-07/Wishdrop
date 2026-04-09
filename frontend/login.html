@@ -142,12 +142,18 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="js/api.js?v=20260409a"></script>
   <script>
+    function getNextPage() {
+      const params = new URLSearchParams(window.location.search);
+      const next = params.get('next');
+      return next && !next.startsWith('http') ? next : 'dashboard.html';
+    }
+
     // If already logged in redirect to dashboard
     Auth.onAuthChanged(async (user) => {
       if (user) {
         try {
           await API.Users.sync();
-          window.location.href = 'dashboard.html';
+          window.location.href = getNextPage();
         } catch (e) {
           const err = document.getElementById('errorMsg');
           document.getElementById('loginSection').style.display = 'block';

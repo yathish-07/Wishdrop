@@ -402,6 +402,23 @@ window.copyShareLink = copyShareLink;
 
 window.addEventListener('DOMContentLoaded', async () => {
   try {
+    const user = await new Promise((resolve) => {
+      const existing = Auth.currentUser();
+      if (existing) {
+        resolve(existing);
+        return;
+      }
+      const unsubscribe = Auth.onAuthChanged((currentUser) => {
+        unsubscribe();
+        resolve(currentUser);
+      });
+    });
+
+    if (!user) {
+      window.location.href = 'login.html?next=dashboard.html';
+      return;
+    }
+
     const params = new URLSearchParams(window.location.search);
     wishId = params.get('id');
     templateNo = parseInt(params.get('template') || '1', 10);

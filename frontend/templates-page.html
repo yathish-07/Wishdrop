@@ -525,6 +525,9 @@
     <span class="cta-note">you can change this later</span>
   </div>
 
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="js/api.js?v=20260409a"></script>
   <script>
     const templates = ['Rose Petal', 'Midnight', 'Pastel Dream'];
     const templateFiles = ['wishdrop-template.html', 'wishdrop-template-2.html', 'wishdrop-template-3.html'];
@@ -537,7 +540,12 @@
     let selectedIndex = 0;
 
     function updateCta(index) {
-      useTemplateBtn.href = `edit.html?template=${templateIds[index]}&name=${encodeURIComponent(templates[index])}`;
+      const target = `edit.html?template=${templateIds[index]}&name=${encodeURIComponent(templates[index])}`;
+      const isLoggedIn = !!Auth.currentUser();
+      useTemplateBtn.href = isLoggedIn ? target : 'login.html?next=dashboard.html';
+      useTemplateBtn.dataset.target = target;
+      useTemplateBtn.dataset.requiresAuth = isLoggedIn ? 'false' : 'true';
+      useTemplateBtn.childNodes[0].textContent = isLoggedIn ? 'Use This Template\n      ' : 'Sign In To Continue\n      ';
     }
 
     function selectCard(index) {
@@ -555,6 +563,16 @@
       const loader = document.getElementById(`load${index}`);
       if (loader) loader.classList.add('hidden');
     }
+
+    useTemplateBtn.addEventListener('click', (event) => {
+      if (Auth.currentUser()) return;
+      event.preventDefault();
+      window.location.href = 'login.html?next=dashboard.html';
+    });
+
+    Auth.onAuthChanged(() => {
+      updateCta(selectedIndex);
+    });
 
     updateCta(selectedIndex);
 
