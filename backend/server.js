@@ -26,8 +26,10 @@ app.use(cors({
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
 // ── FIREBASE ADMIN INIT ──
-// serviceAccountKey.json stays on server ONLY — never sent to browser
-const serviceAccount = require('./serviceAccountKey.json');
+// Firebase service account comes from env in production, local file in development
+const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_JSON
+  ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON)
+  : require('./serviceAccountKey.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
