@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WishDrop — Because she deserves more than a text.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose:         #e63070;
+      --rose-light:   #fff0f3;
+      --rose-mid:     #ffccd5;
+      --rose-dark:    #c9184a;
+      --cream:        #fffaf8;
+      --dark:         #1a0a10;
+      --muted:        #9a7080;
+      --border:       #f0e4e8;
+      --font-display: 'Yeseva One', serif;
+      --font-serif:   'Cormorant Garamond', serif;
+      --font-sans:    'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--dark);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── PETALS ── */
+    .petals {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .petal {
+      position: absolute;
+      border-radius: 50% 0 50% 0;
+      opacity: 0;
+      animation: fall linear infinite;
+    }
+    .petal:nth-child(1)  { width:7px;  height:10px; left:4%;  background:#ffb3c6; animation-duration:9s;  animation-delay:0s;   }
+    .petal:nth-child(2)  { width:9px;  height:13px; left:14%; background:#ffc8d4; animation-duration:12s; animation-delay:2s;   }
+    .petal:nth-child(3)  { width:6px;  height:9px;  left:26%; background:#ffabc0; animation-duration:8s;  animation-delay:4s;   }
+    .petal:nth-child(4)  { width:8px;  height:11px; left:40%; background:#ffd6e0; animation-duration:11s; animation-delay:1s;   }
+    .petal:nth-child(5)  { width:7px;  height:10px; left:55%; background:#ffb3c6; animation-duration:10s; animation-delay:3s;   }
+    .petal:nth-child(6)  { width:10px; height:14px; left:67%; background:#ffc0cb; animation-duration:13s; animation-delay:5s;   }
+    .petal:nth-child(7)  { width:6px;  height:9px;  left:78%; background:#ffabc0; animation-duration:9s;  animation-delay:7s;   }
+    .petal:nth-child(8)  { width:8px;  height:12px; left:88%; background:#ffd6e0; animation-duration:11s; animation-delay:0.5s; }
+
+    @keyframes fall {
+      0%   { transform: translateY(-20px) rotate(0deg);   opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.3; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,250,248,0.92);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--rose);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--dark); }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--rose);
+      color: white;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 0.55rem 1.3rem;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .nav-cta:hover { background: var(--rose-dark); transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 5rem 2rem 3rem;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%,   #fde0ea 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 10% 80%,  #ffe4ec 0%, transparent 50%),
+        radial-gradient(ellipse 50% 40% at 90% 70%,  #ffd6e8 0%, transparent 50%);
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rose);
+      background: var(--rose-light);
+      border: 1px solid var(--rose-mid);
+      padding: 5px 16px;
+      border-radius: 20px;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 10vw, 6.5rem);
+      color: var(--dark);
+      line-height: 1;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+
+    .hero-sub {
+      font-family: var(--font-serif);
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.65;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--rose);
+      color: white;
+      font-family: var(--font-sans);
+      font-size: 15px;
+      font-weight: 500;
+      padding: 0.85rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      letter-spacing: 0.02em;
+    }
+
+    .btn-primary:hover {
+      background: var(--rose-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(230,48,112,0.3);
+    }
+
+    .btn-primary svg { width: 16px; height: 16px; }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--dark);
+      font-family: var(--font-sans);
+      font-size: 15px;
+      font-weight: 400;
+      padding: 0.85rem 1.75rem;
+      border-radius: 50px;
+      border: 1.5px solid var(--border);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-ghost:hover { border-color: var(--rose-mid); background: var(--rose-light); }
+    .btn-ghost svg { width: 14px; height: 14px; }
+
+    /* Floating template previews */
+    .hero-preview {
+      position: relative;
+      margin-top: 4rem;
+      width: 100%;
+      max-width: 760px;
+      height: 300px;
+      animation: fadeUp 0.8s 0.4s ease both;
+    }
+
+    .preview-card {
+      position: absolute;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+      border: 2px solid white;
+    }
+
+    .preview-card iframe {
+      display: block;
+      width: 1024px;
+      border: none;
+      transform-origin: top left;
+      pointer-events: none;
+    }
+
+    /* Center card */
+    .preview-card:nth-child(1) {
+      width: 220px;
+      height: 300px;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      z-index: 3;
+      border-color: var(--rose-mid);
+      box-shadow: 0 20px 60px rgba(230,48,112,0.2);
+    }
+    .preview-card:nth-child(1) iframe {
+      height: calc(300px * 1024 / 220);
+      transform: scale(calc(220 / 1024));
+    }
+
+    /* Left card */
+    .preview-card:nth-child(2) {
+      width: 190px;
+      height: 260px;
+      left: calc(50% - 230px);
+      top: 20px;
+      transform: rotate(-5deg);
+      z-index: 2;
+      opacity: 0.8;
+    }
+    .preview-card:nth-child(2) iframe {
+      height: calc(260px * 1024 / 190);
+      transform: scale(calc(190 / 1024));
+    }
+
+    /* Right card */
+    .preview-card:nth-child(3) {
+      width: 190px;
+      height: 260px;
+      right: calc(50% - 230px);
+      top: 20px;
+      transform: rotate(5deg);
+      z-index: 2;
+      opacity: 0.8;
+    }
+    .preview-card:nth-child(3) iframe {
+      height: calc(260px * 1024 / 190);
+      transform: scale(calc(190 / 1024));
+    }
+
+    /* ── SECTION COMMONS ── */
+    .section-eyebrow {
+      display: block;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      text-align: center;
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--dark);
+      margin-bottom: 0.75rem;
+      line-height: 1.1;
+    }
+
+    .section-sub {
+      text-align: center;
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how-section {
+      padding: 6rem 2rem;
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+      position: relative;
+    }
+
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 26px;
+      left: 13%;
+      right: 13%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--rose-mid), var(--rose-mid), transparent);
+    }
+
+    .step-card {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-num {
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid var(--rose-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.1rem;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--rose);
+      box-shadow: 0 4px 16px rgba(230,48,112,0.1);
+      transition: all 0.25s ease;
+    }
+
+    .step-card:hover .step-num {
+      background: var(--rose);
+      color: white;
+      border-color: var(--rose);
+      box-shadow: 0 6px 20px rgba(230,48,112,0.3);
+    }
+
+    .step-emoji { font-size: 1.5rem; display: block; margin-bottom: 0.6rem; }
+
+    .step-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 0.4rem;
+    }
+
+    .step-body {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* ── FEATURES ── */
+    .features-section {
+      padding: 4rem 2rem 6rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      max-width: 900px;
+      margin: 3rem auto 0;
+    }
+
+    .feature-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.75rem 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      border-color: var(--rose-mid);
+      box-shadow: 0 8px 32px rgba(230,48,112,0.08);
+      transform: translateY(-3px);
+    }
+
+    .feature-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.9rem;
+      display: block;
+    }
+
+    .feature-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-body {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.65;
+    }
+
+    /* ── TEMPLATES ── */
+    .templates-section {
+      padding: 5rem 2rem 4rem;
+      background: linear-gradient(135deg, #fff0f3 0%, #fffaf8 50%, #fde8ef 100%);
+      position: relative;
+      z-index: 1;
+    }
+
+    .templates-row {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      align-items: flex-end;
+      max-width: 840px;
+      margin: 3rem auto 0;
+      flex-wrap: wrap;
+    }
+
+    .template-thumb {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid white;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      transition: all 0.35s ease;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .template-thumb:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 20px 50px rgba(230,48,112,0.18);
+      border-color: var(--rose-mid);
+    }
+
+    .template-thumb iframe {
+      display: block;
+      width: 1024px;
+      border: none;
+      pointer-events: none;
+      transform-origin: top left;
+    }
+
+    .t-sm { width: 175px; }
+    .t-sm .t-frame { height: 250px; overflow: hidden; }
+    .t-sm iframe { height: calc(250px * 1024 / 175); transform: scale(calc(175/1024)); }
+
+    .t-md { width: 210px; }
+    .t-md .t-frame { height: 300px; overflow: hidden; }
+    .t-md iframe { height: calc(300px * 1024 / 210); transform: scale(calc(210/1024)); }
+
+    .thumb-label {
+      padding: 0.6rem 0.9rem;
+      background: white;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .thumb-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    .templates-cta { text-align: center; margin-top: 2.5rem; }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials-section {
+      padding: 6rem 2rem;
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 3rem;
+    }
+
+    .testimonial-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.75rem 1.5rem;
+      position: relative;
+    }
+
+    .testimonial-card::before {
+      content: '"';
+      position: absolute;
+      top: 0.75rem; right: 1.25rem;
+      font-family: var(--font-serif);
+      font-size: 4rem;
+      color: var(--rose-mid);
+      line-height: 1;
+      opacity: 0.5;
+    }
+
+    .t-stars {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 0.75rem;
+    }
+
+    .star {
+      width: 12px; height: 12px;
+      background: #f59e0b;
+      clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+    }
+
+    .t-text {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      font-style: italic;
+      color: var(--dark);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+
+    .t-author { display: flex; align-items: center; gap: 10px; }
+
+    .t-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .av-1 { background: linear-gradient(135deg, #e63070, #ff85a1); }
+    .av-2 { background: linear-gradient(135deg, #c9a84c, #f4d06f); }
+    .av-3 { background: linear-gradient(135deg, #c084fc, #f472b6); }
+
+    .t-name { font-size: 13px; font-weight: 600; color: var(--dark); }
+    .t-handle { font-size: 11px; color: var(--muted); }
+
+    /* ── PRICING ── */
+    .pricing-section {
+      padding: 5rem 2rem 6rem;
+      background: var(--dark);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pricing-section .section-eyebrow { color: var(--rose-mid); }
+    .pricing-section .section-title { color: white; }
+    .pricing-section .section-sub { color: rgba(255,255,255,0.45); margin-bottom: 2.5rem; }
+
+    .pricing-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      max-width: 380px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .pricing-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--rose-mid);
+      margin-bottom: 1rem;
+    }
+
+    .pricing-price {
+      display: flex;
+      align-items: baseline;
+      gap: 3px;
+      margin-bottom: 0.25rem;
+    }
+
+    .price-symbol { font-size: 1.5rem; font-weight: 500; color: white; }
+    .price-amount { font-family: var(--font-display); font-size: 4rem; color: white; line-height: 1; }
+
+    .price-note {
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+
+    .pricing-divider { height: 1px; background: rgba(255,255,255,0.1); margin-bottom: 1.5rem; }
+
+    .pricing-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .pricing-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      font-weight: 300;
+    }
+
+    .check-icon {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: rgba(230,48,112,0.2);
+      border: 1px solid rgba(230,48,112,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .check-icon svg { width: 10px; height: 10px; stroke: var(--rose); }
+
+    .pricing-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: var(--rose);
+      color: white;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 0.9rem;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: background 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .pricing-btn:hover { background: var(--rose-dark); }
+
+    /* ── FAQ ── */
+    .faq-section {
+      padding: 6rem 2rem;
+      max-width: 680px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .faq-list { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 2.5rem; }
+
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      background: white;
+    }
+
+    .faq-q {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 1.25rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--dark);
+      text-align: left;
+      gap: 1rem;
+    }
+
+    .faq-q svg {
+      width: 16px; height: 16px;
+      stroke: var(--muted);
+      flex-shrink: 0;
+      transition: transform 0.3s ease, stroke 0.3s ease;
+    }
+
+    .faq-item.open .faq-q svg { transform: rotate(45deg); stroke: var(--rose); }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.7;
+      padding: 0 1.25rem;
+    }
+
+    .faq-item.open .faq-a { max-height: 200px; padding: 0 1.25rem 1.1rem; }
+
+    /* ── CLOSING ── */
+    .closing-section {
+      padding: 6rem 2rem 5rem;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .closing-bg {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(ellipse 70% 80% at 50% 100%, #fde0ea 0%, transparent 65%);
+    }
+
+    .closing-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 6vw, 4rem);
+      color: var(--dark);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .closing-sub {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      max-width: 380px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 1.75rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: white;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo { font-family: var(--font-display); font-size: 1.2rem; color: var(--rose); }
+
+    .footer-links { display: flex; gap: 1.75rem; list-style: none; }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--dark); }
+
+    .footer-copy { font-size: 12px; color: var(--muted); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .steps-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps-grid::before { display: none; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonials-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .navbar { padding: 1rem 1.25rem; }
+      .nav-links { display: none; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .hero-preview { display: none; }
+      .templates-row { gap: 1rem; }
+      .footer { flex-direction: column; align-items: flex-start; }
+      .footer-links { flex-wrap: wrap; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="petals">
+    <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+    <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+    <div class="petal"></div><div class="petal"></div>
+  </div>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar">
+    <a href="#" class="nav-logo">WishDrop</a>
+    <ul class="nav-links">
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#templates">Templates</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+    </ul>
+    <a href="login.html" class="nav-cta">
+      Create a Wish
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+
+    <div class="hero-eyebrow">✦ Made for boyfriends who actually try ✦</div>
+    <h1 class="hero-title">WishDrop</h1>
+    <p class="hero-sub">Because she deserves more than a text. Create a beautiful, personal birthday wish page for her — in minutes.</p>
+
+    <div class="hero-buttons">
+      <a href="templates-page.html" class="btn-primary">
+        Create Her Wish Page
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#templates" class="btn-ghost">
+        See Templates
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </a>
+    </div>
+
+    <div class="hero-preview">
+      <div class="preview-card">
+        <iframe src="wishdrop-template.html" scrolling="no" title="Rose Petal"></iframe>
+      </div>
+      <div class="preview-card">
+        <iframe src="wishdrop-template-2.html" scrolling="no" title="Midnight"></iframe>
+      </div>
+      <div class="preview-card">
+        <iframe src="wishdrop-template-3.html" scrolling="no" title="Pastel Dream"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HOW IT WORKS ── -->
+  <section class="how-section" id="how">
+    <span class="section-eyebrow">Simple & fast</span>
+    <h2 class="section-title">Create in 4 easy steps</h2>
+    <p class="section-sub">Takes less than 5 minutes. She'll remember it forever.</p>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <span class="step-emoji">🎨</span>
+        <div class="step-title">Pick a template</div>
+        <p class="step-body">Choose from 3 beautiful designs — romantic, dark & cinematic, or pastel & playful.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <span class="step-emoji">📸</span>
+        <div class="step-title">Upload your photos</div>
+        <p class="step-body">Add up to 5 of your favourite photos together. Arrange them in any order.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <span class="step-emoji">✍️</span>
+        <div class="step-title">Write your wish</div>
+        <p class="step-body">Fill in her name, age, your message, and memories. Make it completely yours.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <span class="step-emoji">💌</span>
+        <div class="step-title">Share the link</div>
+        <p class="step-body">Send her a private link. She opens it on her birthday and sees the whole page.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FEATURES ── -->
+  <section class="features-section" id="features">
+    <span class="section-eyebrow">Everything included</span>
+    <h2 class="section-title">Built for the moment</h2>
+    <p class="section-sub">No design skills needed. No apps to download.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">🎨</span>
+        <div class="feature-title">3 beautiful templates</div>
+        <p class="feature-body">Rose Petal, Midnight, and Pastel Dream — each with its own animations and personality.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📸</span>
+        <div class="feature-title">Photo gallery</div>
+        <p class="feature-body">Upload and arrange up to 5 photos. They display beautifully in the wish page layout.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">✏️</span>
+        <div class="feature-title">Fully editable text</div>
+        <p class="feature-body">Click any part of the template and type your own words. The design stays intact.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🔗</span>
+        <div class="feature-title">Private shareable link</div>
+        <p class="feature-body">A unique link only she can open. No account needed on her end — just tap and feel.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">⏳</span>
+        <div class="feature-title">Auto-expires in 2 days</div>
+        <p class="feature-body">The link disappears after 2 days — keeping it special, private, and just for her.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📄</span>
+        <div class="feature-title">Download as PDF</div>
+        <p class="feature-body">She can save the whole page as a beautiful PDF to keep forever. Just ₹10.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TEMPLATES ── -->
+  <section class="templates-section" id="templates">
+    <span class="section-eyebrow">3 vibes, 3 feelings</span>
+    <h2 class="section-title">Pick your aesthetic</h2>
+    <p class="section-sub">Each template tells a different love story.</p>
+
+    <div class="templates-row">
+      <div class="template-thumb t-sm">
+        <div class="t-frame">
+          <iframe src="wishdrop-template-2.html" scrolling="no" title="Midnight"></iframe>
+        </div>
+        <div class="thumb-label">Midnight <div class="thumb-dot" style="background:#c9a84c"></div></div>
+      </div>
+      <div class="template-thumb t-md">
+        <div class="t-frame">
+          <iframe src="wishdrop-template.html" scrolling="no" title="Rose Petal"></iframe>
+        </div>
+        <div class="thumb-label">Rose Petal ✦ <div class="thumb-dot" style="background:#e63070"></div></div>
+      </div>
+      <div class="template-thumb t-sm">
+        <div class="t-frame">
+          <iframe src="wishdrop-template-3.html" scrolling="no" title="Pastel Dream"></iframe>
+        </div>
+        <div class="thumb-label">Pastel Dream <div class="thumb-dot" style="background:#c084fc"></div></div>
+      </div>
+    </div>
+
+    <div class="templates-cta">
+      <a href="templates-page.html" class="btn-primary">
+        Browse All Templates
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── TESTIMONIALS ── -->
+  <section class="testimonials-section">
+    <span class="section-eyebrow">Real reactions</span>
+    <h2 class="section-title">She's going to cry. In a good way.</h2>
+    <p class="section-sub">What boyfriends are saying after using WishDrop.</p>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="t-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+        <p class="t-text">"She called me crying the moment she opened the link. Said it was the most thoughtful thing anyone had ever done for her."</p>
+        <div class="t-author">
+          <div class="t-avatar av-1">AK</div>
+          <div><div class="t-name">Aarav K.</div><div class="t-handle">Made a Rose Petal page for Priya</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="t-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+        <p class="t-text">"I'm not good with words but this helped me say everything I couldn't. Took me 10 minutes and she screenshotted the whole thing."</p>
+        <div class="t-author">
+          <div class="t-avatar av-2">VM</div>
+          <div><div class="t-name">Vikram M.</div><div class="t-handle">Made a Midnight page for Ananya</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="t-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+        <p class="t-text">"Bro just send her this instead of a text. Trust me. She showed the page to literally all her friends."</p>
+        <div class="t-author">
+          <div class="t-avatar av-3">DS</div>
+          <div><div class="t-name">Dev S.</div><div class="t-handle">Made a Pastel Dream page for Riya</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PRICING ── -->
+  <section class="pricing-section" id="pricing">
+    <span class="section-eyebrow">Simple pricing</span>
+    <h2 class="section-title">Free to create. ₹10 to keep.</h2>
+    <p class="section-sub">Creating the page is completely free. Pay only if she wants to save it.</p>
+
+    <div class="pricing-card">
+      <div class="pricing-label">What you get</div>
+      <div class="pricing-price">
+        <span class="price-symbol">₹</span>
+        <span class="price-amount">0</span>
+      </div>
+      <div class="price-note">to create & share · ₹10 only for PDF download</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Choose from 3 premium templates</li>
+        <li><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Upload up to 5 photos</li>
+        <li><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Fully editable text & wish message</li>
+        <li><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>Private shareable link</li>
+        <li><div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>PDF download for ₹10 (one-time)</li>
+      </ul>
+      <a href="login.html" class="pricing-btn">
+        Start Creating — It's Free
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── FAQ ── -->
+  <section class="faq-section">
+    <span class="section-eyebrow">Questions</span>
+    <h2 class="section-title">Things you might wonder</h2>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Does she need to download anything to see it?<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="faq-a">No. She just taps the link and the wish page opens in her browser. No app, no account, no friction.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Why does the link expire in 2 days?<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="faq-a">To keep it special and private. The page is made just for her birthday moment. She can download the PDF to keep it forever before it expires.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Can I edit after I share the link?<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="faq-a">Yes. You can edit the wish page at any time before the link expires. Open your creator link and make changes.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">What payment method for the PDF?<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="faq-a">Razorpay — UPI, cards, and net banking all work. One-time ₹10 payment, no subscriptions ever.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Is my data safe?<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        <div class="faq-a">Yes. Photos and wish data are stored securely and deleted automatically after 2 days. We never share or sell your data.</div>
+      </div>
+    </div>
+  </section> 
+
+  <!-- ── CLOSING CTA ── -->
+  <section class="closing-section">
+    <div class="closing-bg"></div>
+    <h2 class="closing-title">She's waiting for<br/>something real. 💕</h2>
+    <p class="closing-sub">Make her birthday feel like the movies. Takes 5 minutes.</p>
+    <a href="login.html" class="btn-primary">
+      Create Her Wish Page — Free
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="footer-logo">WishDrop</div>
+    <ul class="footer-links">
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#templates">Templates</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#">Privacy</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 WishDrop · made with 💕 in India</div>
+  </footer>
+
+  <script src="js/index-script.js"></script>
+
+</body>
+</html>

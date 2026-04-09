@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WishDrop — Sign In</title>
+  <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --rose: #e63070; --rose-light: #fff0f3; --rose-mid: #ffccd5;
+      --dark: #1a0a10; --muted: #9a7080; --cream: #fffaf8; --border: #f0e4e8;
+    }
+    body { background: var(--cream); font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+
+    /* Petals */
+    .petals { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .petal { position: absolute; border-radius: 50% 0 50% 0; opacity: 0; animation: fall linear infinite; }
+    .petal:nth-child(1) { width:7px; height:10px; left:8%;  background:#ffb3c6; animation-duration:9s;  animation-delay:0s;  }
+    .petal:nth-child(2) { width:9px; height:13px; left:22%; background:#ffc8d4; animation-duration:12s; animation-delay:3s;  }
+    .petal:nth-child(3) { width:6px; height:9px;  left:45%; background:#ffabc0; animation-duration:8s;  animation-delay:1s;  }
+    .petal:nth-child(4) { width:8px; height:11px; left:68%; background:#ffd6e0; animation-duration:11s; animation-delay:5s;  }
+    .petal:nth-child(5) { width:7px; height:10px; left:85%; background:#ffb3c6; animation-duration:10s; animation-delay:2s;  }
+    @keyframes fall {
+      0%   { transform: translateY(-20px) rotate(0deg);   opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.3; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Hero bg */
+    .bg {
+      position: fixed; inset: 0; z-index: -1;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%, #fde0ea 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 10% 80%, #ffe4ec 0%, transparent 50%);
+    }
+
+    /* Card */
+    .card {
+      position: relative; z-index: 1;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(230,48,112,0.1);
+      animation: popIn 0.6s cubic-bezier(0.175,0.885,0.32,1.275) both;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.92) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .logo { font-family: 'Yeseva One', serif; font-size: 2rem; color: var(--rose); margin-bottom: 0.25rem; }
+    .tagline { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-style: italic; color: var(--muted); margin-bottom: 2.5rem; }
+
+    .divider { height: 1px; background: var(--border); margin-bottom: 2rem; }
+
+    .sign-in-label { font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 1.25rem; letter-spacing: 0.05em; }
+
+    .google-btn {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      width: 100%; padding: 0.85rem 1.5rem;
+      background: white; color: #3c4043;
+      border: 1.5px solid #dadce0; border-radius: 12px;
+      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
+      cursor: pointer; transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .google-btn:hover { border-color: #c9184a; box-shadow: 0 4px 16px rgba(230,48,112,0.15); background: var(--rose-light); }
+    .google-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .google-icon { width: 20px; height: 20px; flex-shrink: 0; }
+
+    .terms { font-size: 11px; color: var(--muted); margin-top: 1.5rem; line-height: 1.6; }
+    .terms a { color: var(--rose); text-decoration: none; }
+
+    /* Loading state */
+    .loading { display: none; flex-direction: column; align-items: center; gap: 1rem; }
+    .spinner {
+      width: 32px; height: 32px;
+      border: 3px solid var(--rose-mid);
+      border-top-color: var(--rose);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-msg {
+      display: none; margin-top: 1rem;
+      background: #fff0f3; border: 1px solid var(--rose-mid);
+      border-radius: 10px; padding: 0.75rem 1rem;
+      font-size: 13px; color: var(--rose);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg"></div>
+  <div class="petals">
+    <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+    <div class="petal"></div><div class="petal"></div>
+  </div>
+
+  <div class="card">
+    <div class="logo">WishDrop</div>
+    <p class="tagline">Because she deserves more than a text.</p>
+    <div class="divider"></div>
+
+    <div id="loginSection">
+      <p class="sign-in-label">Sign in to start creating wish pages</p>
+      <button class="google-btn" id="googleBtn" onclick="signIn()">
+        <svg class="google-icon" viewBox="0 0 24 24">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        Continue with Google
+      </button>
+
+      <div class="error-msg" id="errorMsg"></div>
+
+      <p class="terms">
+        By signing in you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.<br/>
+        Creating a wish costs ₹10. PDF download costs ₹10.
+      </p>
+    </div>
+
+    <div class="loading" id="loadingSection">
+      <div class="spinner"></div>
+      <p style="font-size:13px; color:var(--muted)">Signing you in...</p>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    // If already logged in redirect to dashboard
+    Auth.onAuthChanged(async (user) => {
+      if (user) {
+        try {
+          await API.Users.sync();
+          window.location.href = 'dashboard.html';
+        } catch (e) {
+          const err = document.getElementById('errorMsg');
+          document.getElementById('loginSection').style.display = 'block';
+          document.getElementById('loadingSection').style.display = 'none';
+          document.getElementById('googleBtn').disabled = false;
+          err.textContent = e.message || 'Sign in failed. Please try again.';
+          err.style.display = 'block';
+        }
+      }
+    });
+
+    async function signIn() {
+      const btn = document.getElementById('googleBtn');
+      const err = document.getElementById('errorMsg');
+      const loginSection   = document.getElementById('loginSection');
+      const loadingSection = document.getElementById('loadingSection');
+
+      try {
+        btn.disabled = true;
+        loginSection.style.display   = 'none';
+        loadingSection.style.display = 'flex';
+        err.style.display = 'none';
+
+        await Auth.signInWithGoogle();
+        // redirect handled by onAuthChanged above
+      } catch (e) {
+        loginSection.style.display   = 'block';
+        loadingSection.style.display = 'none';
+        btn.disabled = false;
+        err.textContent  = e.message === 'Payment cancelled' ? 'Sign in cancelled.' : (e.message || 'Sign in failed. Please try again.');
+        err.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>

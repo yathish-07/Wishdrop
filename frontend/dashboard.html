@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WishDrop — My Wishes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --rose:#e63070; --rose-light:#fff0f3; --rose-mid:#ffccd5; --rose-dark:#c9184a;
+      --dark:#1a0a10; --muted:#9a7080; --cream:#fffaf8; --border:#f0e4e8;
+      --surface:#ffffff; --gold:#c9a84c;
+    }
+    body { background: var(--cream); font-family: 'DM Sans', sans-serif; min-height: 100vh; color: var(--dark); }
+
+    /* ── NAV ── */
+    .navbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(255,250,248,0.95); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-logo { font-family: 'Yeseva One', serif; font-size: 1.4rem; color: var(--rose); text-decoration: none; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .user-pill {
+      display: flex; align-items: center; gap: 8px;
+      background: white; border: 1px solid var(--border);
+      border-radius: 50px; padding: 5px 12px 5px 5px;
+    }
+    .user-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      object-fit: cover; border: 1.5px solid var(--rose-mid);
+    }
+    .user-name { font-size: 13px; font-weight: 500; color: var(--dark); }
+    .sign-out-btn {
+      font-size: 12px; color: var(--muted); background: none;
+      border: none; cursor: pointer; padding: 4px 8px; border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .sign-out-btn:hover { background: var(--rose-light); color: var(--rose); }
+
+    /* ── CONTENT ── */
+    .container { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
+
+    .page-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;
+    }
+
+    .page-title { font-family: 'Yeseva One', serif; font-size: 2rem; color: var(--dark); }
+    .page-sub   { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-style: italic; color: var(--muted); margin-top: 0.25rem; }
+
+    .create-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--rose); color: white;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+      padding: 0.7rem 1.5rem; border-radius: 50px; border: none;
+      cursor: pointer; transition: all 0.2s ease; text-decoration: none;
+      white-space: nowrap;
+    }
+    .create-btn:hover { background: var(--rose-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(230,48,112,0.3); }
+    .create-btn svg { width: 16px; height: 16px; }
+
+    /* ── STATS ROW ── */
+    .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 2.5rem; }
+    .stat-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: 16px; padding: 1.25rem 1.5rem;
+    }
+    .stat-num { font-family: 'Yeseva One', serif; font-size: 2rem; color: var(--rose); }
+    .stat-label { font-size: 12px; color: var(--muted); font-weight: 400; margin-top: 2px; }
+
+    /* ── WISH CARDS ── */
+    .wishes-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1.25rem; }
+
+    .wish-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+      transition: all 0.3s ease; cursor: pointer;
+    }
+    .wish-card:hover { border-color: var(--rose-mid); box-shadow: 0 8px 32px rgba(230,48,112,0.1); transform: translateY(-2px); }
+
+    .wish-preview {
+      height: 180px; overflow: hidden; position: relative;
+      background: var(--rose-light);
+    }
+    .wish-preview iframe {
+      width: 1024px; height: calc(180px * 1024 / 320);
+      border: none; transform-origin: top left;
+      transform: scale(calc(320/1024));
+      pointer-events: none;
+    }
+
+    /* Template color banners */
+    .template-banner {
+      position: absolute; top: 10px; left: 10px; z-index: 2;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 20px;
+    }
+    .banner-1 { background: #ffccd5; color: #c9184a; }
+    .banner-2 { background: #2a2a35; color: #c9a84c; }
+    .banner-3 { background: #e9d5ff; color: #7c3aed; }
+
+    /* Expiry badge */
+    .expiry-badge {
+      position: absolute; top: 10px; right: 10px; z-index: 2;
+      font-size: 10px; font-weight: 500; padding: 3px 10px; border-radius: 20px;
+    }
+    .badge-active  { background: #d1fae5; color: #065f46; }
+    .badge-expired { background: #fee2e2; color: #991b1b; }
+
+    .wish-body { padding: 1.1rem 1.25rem 1.25rem; }
+
+    .wish-occasion {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--rose);
+      background: var(--rose-light); padding: 2px 8px;
+      border-radius: 20px; display: inline-block; margin-bottom: 0.5rem;
+    }
+
+    .wish-title { font-family: 'Yeseva One', serif; font-size: 1.1rem; color: var(--dark); margin-bottom: 0.25rem; }
+    .wish-meta  { font-size: 12px; color: var(--muted); font-weight: 300; }
+
+    .wish-actions {
+      display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;
+    }
+
+    .action-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 500; padding: 5px 12px;
+      border-radius: 8px; border: 1px solid var(--border);
+      background: white; color: var(--dark); cursor: pointer;
+      transition: all 0.2s; text-decoration: none;
+    }
+    .action-btn:hover { border-color: var(--rose-mid); background: var(--rose-light); color: var(--rose); }
+    .action-btn svg { width: 12px; height: 12px; }
+    .action-btn.danger:hover { border-color: #fca5a5; background: #fff5f5; color: #dc2626; }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center; padding: 5rem 2rem;
+      grid-column: 1 / -1;
+    }
+    .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .empty-title { font-family: 'Yeseva One', serif; font-size: 1.5rem; color: var(--dark); margin-bottom: 0.5rem; }
+    .empty-sub { font-size: 14px; color: var(--muted); font-weight: 300; margin-bottom: 2rem; }
+
+    /* Loading skeleton */
+    .skeleton {
+      background: linear-gradient(90deg, #f5f5f5 25%, #ececec 50%, #f5f5f5 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 8px;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* Payment modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(26,10,16,0.5); z-index: 1000;
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: white; border-radius: 24px;
+      padding: 2.5rem 2rem; max-width: 380px; width: 90%;
+      text-align: center; animation: popIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    @keyframes popIn { from { opacity:0; transform:scale(0.9); } to { opacity:1; transform:scale(1); } }
+    .modal-icon  { font-size: 2.5rem; margin-bottom: 1rem; }
+    .modal-title { font-family: 'Yeseva One', serif; font-size: 1.5rem; color: var(--dark); margin-bottom: 0.5rem; }
+    .modal-sub   { font-size: 14px; color: var(--muted); font-weight: 300; line-height: 1.6; margin-bottom: 2rem; }
+    .modal-price {
+      font-family: 'Yeseva One', serif; font-size: 3rem; color: var(--rose);
+      margin-bottom: 0.25rem;
+    }
+    .modal-price-note { font-size: 12px; color: var(--muted); margin-bottom: 2rem; }
+    .modal-pay-btn {
+      width: 100%; padding: 0.9rem; background: var(--rose); color: white;
+      border: none; border-radius: 12px; font-size: 15px; font-weight: 500;
+      cursor: pointer; transition: background 0.2s; font-family: 'DM Sans', sans-serif;
+    }
+    .modal-pay-btn:hover { background: var(--rose-dark); }
+    .modal-cancel { display: block; margin-top: 0.75rem; font-size: 13px; color: var(--muted); cursor: pointer; background: none; border: none; }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .navbar { padding: 1rem 1.25rem; }
+      .wishes-grid { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: repeat(2,1fr); }
+      .page-header { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="dashboard.html" class="nav-logo">WishDrop</a>
+    <div class="nav-right">
+      <div class="user-pill">
+        <img class="user-avatar" id="userAvatar" src="" alt=""/>
+        <span class="user-name" id="userName">Loading...</span>
+      </div>
+      <button class="sign-out-btn" onclick="Auth.signOut()">Sign out</button>
+    </div>
+  </nav>
+
+  <!-- PAYMENT MODAL -->
+  <div class="modal-overlay" id="paymentModal">
+    <div class="modal">
+      <div class="modal-icon">💌</div>
+      <div class="modal-title">Create a Wish</div>
+      <p class="modal-sub">Each wish page costs a small fee. Your girlfriend gets to open it free — only the PDF download costs extra.</p>
+      <div class="modal-price">₹10</div>
+      <div class="modal-price-note">one-time · instant access · link active 2 days</div>
+      <button class="modal-pay-btn" id="payBtn" onclick="initiatePayment()">Pay ₹10 & Continue</button>
+      <button class="modal-cancel" onclick="closeModal()">Maybe later</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">My Wishes</h1>
+        <p class="page-sub">Every wish you've made, in one place.</p>
+      </div>
+      <button class="create-btn" onclick="showPaymentModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Wish — ₹10
+      </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row" id="statsRow">
+      <div class="stat-card"><div class="stat-num skeleton" style="width:40px;height:36px"></div><div class="stat-label">Total Wishes</div></div>
+      <div class="stat-card"><div class="stat-num skeleton" style="width:40px;height:36px"></div><div class="stat-label">Active Links</div></div>
+      <div class="stat-card"><div class="stat-num skeleton" style="width:40px;height:36px"></div><div class="stat-label">PDFs Downloaded</div></div>
+    </div>
+
+    <!-- Wishes grid -->
+    <div class="wishes-grid" id="wishesGrid">
+      <!-- Loaded by JS -->
+    </div>
+  </div>
+
+  <!-- Firebase + Razorpay -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    const templateFiles = ['', 'wishdrop-template.html', 'wishdrop-template-2.html', 'wishdrop-template-3.html'];
+    const occasionEmoji = { birthday: '🎂', anniversary: '💍', valentines: '💝', random: '💌' };
+
+    // ── AUTH GUARD ──
+    Auth.onAuthChanged(async (user) => {
+      if (!user) return window.location.href = 'login.html';
+      document.getElementById('userName').textContent   = user.displayName.split(' ')[0];
+      document.getElementById('userAvatar').src         = user.photoURL || '';
+      loadDashboard();
+    });
+
+    async function loadDashboard() {
+      try {
+        const { user, wishes } = await API.Users.getMe();
+        renderStats(user, wishes);
+        renderWishes(wishes);
+      } catch (e) {
+        console.error('Dashboard load error:', e);
+        renderStats({}, []);
+        document.getElementById('wishesGrid').innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">⚠️</div>
+            <div class="empty-title">Could not load wishes</div>
+            <p class="empty-sub">${e.message || 'Please refresh after the backend is running.'}</p>
+          </div>`;
+      }
+    }
+
+    function renderStats(user, wishes) {
+      const active  = wishes.filter(w => !w.isExpired && new Date(w.expiresAt?.toDate?.() || w.expiresAt) > new Date()).length;
+      const pdfPaid = wishes.filter(w => w.pdfPaid).length;
+
+      document.getElementById('statsRow').innerHTML = `
+        <div class="stat-card"><div class="stat-num">${wishes.length}</div><div class="stat-label">Total Wishes</div></div>
+        <div class="stat-card"><div class="stat-num">${active}</div><div class="stat-label">Active Links</div></div>
+        <div class="stat-card"><div class="stat-num">${pdfPaid}</div><div class="stat-label">PDFs Downloaded</div></div>
+      `;
+    }
+
+    function renderWishes(wishes) {
+      const grid = document.getElementById('wishesGrid');
+
+      if (wishes.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">💌</div>
+            <div class="empty-title">No wishes yet</div>
+            <p class="empty-sub">Create your first wish page for her.<br/>Takes 5 minutes. She'll remember it forever.</p>
+            <button class="create-btn" onclick="showPaymentModal()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Create First Wish
+            </button>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = wishes.map(wish => {
+        const expiry   = new Date(wish.expiresAt?.toDate?.() || wish.expiresAt);
+        const isActive = expiry > new Date() && !wish.isExpired;
+        const bannerClass = `banner-${wish.templateNo}`;
+        const emoji    = occasionEmoji[wish.occasion] || '💌';
+
+        return `
+          <div class="wish-card">
+            <div class="wish-preview">
+              <span class="template-banner ${bannerClass}">${wish.templateName}</span>
+              <span class="expiry-badge ${isActive ? 'badge-active' : 'badge-expired'}">${isActive ? 'Active' : 'Expired'}</span>
+              <iframe src="${templateFiles[wish.templateNo]}" scrolling="no" title="Preview"></iframe>
+            </div>
+            <div class="wish-body">
+              <span class="wish-occasion">${emoji} ${wish.occasion}</span>
+              <div class="wish-title">For ${wish.gfName}</div>
+              <div class="wish-meta">
+                Created ${Utils.formatDate(wish.createdAt?.toDate?.() || wish.createdAt)}
+                ${wish.pdfPaid ? ' · PDF downloaded ✓' : ''}
+              </div>
+              <div class="wish-actions">
+                <a class="action-btn" href="edit.html?id=${wish.id}" title="Edit">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
+                  Edit
+                </a>
+                <button class="action-btn" onclick="copyLink('${wish.shareUrl}')" title="Copy link">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                  Copy Link
+                </button>
+                <button class="action-btn danger" onclick="deleteWish('${wish.id}')" title="Delete">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    // ── PAYMENT ──
+    function showPaymentModal() { document.getElementById('paymentModal').classList.add('show'); }
+    function closeModal()       { document.getElementById('paymentModal').classList.remove('show'); }
+
+    async function initiatePayment() {
+      const btn = document.getElementById('payBtn');
+      btn.textContent = 'Loading...'; btn.disabled = true;
+
+      try {
+        const order   = await API.Payments.createOrder('create_wish');
+        const payment = await API.Payments.openCheckout({
+          orderId:     order.orderId,
+          amount:      order.amount,
+          currency:    order.currency,
+          keyId:       order.keyId,
+          description: 'Create a WishDrop wish page'
+        });
+
+        // Verify on backend
+        await API.Payments.verify(payment, 'create_wish');
+
+        // Payment verified — go to template picker
+        closeModal();
+        window.location.href = 'templates-page.html';
+      } catch (e) {
+        btn.textContent = 'Pay ₹10 & Continue'; btn.disabled = false;
+        if (e.message !== 'Payment cancelled') alert('Payment failed. Please try again.');
+      }
+    }
+
+    async function copyLink(url) {
+      try {
+        await navigator.clipboard.writeText(url);
+        alert('Link copied! Send it to her 💕');
+      } catch { alert(url); }
+    }
+
+    async function deleteWish(wishId) {
+      if (!confirm('Delete this wish? This cannot be undone.')) return;
+      try {
+        await API.Wishes.delete(wishId);
+        loadDashboard();
+      } catch (e) { alert('Failed to delete wish.'); }
+    }
+  </script>
+</body>
+</html>

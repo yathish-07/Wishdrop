@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>WishDrop - Edit Wish</title>
+<link href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'DM Sans',sans-serif;background:#fffaf8;color:#1a0a10}.navbar{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-bottom:1px solid #f0e4e8;background:#fffaf8;position:sticky;top:0;z-index:10}.nav-logo{font-family:'Yeseva One',serif;color:#e63070;text-decoration:none;font-size:24px}.nav-actions{display:flex;gap:10px}.btn{border:none;border-radius:999px;padding:10px 16px;font:500 13px 'DM Sans',sans-serif;cursor:pointer}.btn-primary{background:#e63070;color:#fff}.btn-ghost{background:#fff;border:1px solid #f0e4e8}.layout{display:grid;grid-template-columns:1fr 360px;min-height:calc(100vh - 73px)}.form-panel{padding:24px;border-right:1px solid #f0e4e8}.preview-panel{position:sticky;top:73px;height:calc(100vh - 73px);background:#f7f3f5}.preview-panel iframe{width:100%;height:100%;border:none;background:#fff}.preview-label{position:absolute;top:12px;left:50%;transform:translateX(-50%);background:#fff;padding:4px 10px;border:1px solid #f0e4e8;border-radius:999px;font-size:11px;color:#9a7080}.step-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.step-pill{padding:6px 12px;border:1px solid #f0e4e8;border-radius:999px;background:#fff;color:#9a7080;font-size:12px;cursor:pointer}.step-pill.active{background:#e63070;color:#fff;border-color:#e63070}.step-pill.done{background:#fff0f3;color:#e63070;border-color:#ffccd5}.share-box{display:none;background:#fff;border:1px solid #ffccd5;border-radius:14px;padding:12px;margin-bottom:16px}.share-box.show{display:block}.share-row{display:flex;gap:8px;margin-top:8px}.share-input{flex:1;padding:10px;border:1px solid #f0e4e8;border-radius:10px;background:#fffaf8;font-size:12px}.share-copy-btn{padding:10px 12px;border:none;border-radius:10px;background:#e63070;color:#fff;font-size:12px;cursor:pointer}.form-section{display:none}.form-section.active{display:block}.section-title{font:400 26px 'Yeseva One',serif;margin-bottom:4px}.section-sub{font-size:13px;color:#9a7080;margin-bottom:18px}.field{margin-bottom:16px}.field label{display:block;margin-bottom:6px;font-size:13px;font-weight:500}.field-hint{font-size:11px;color:#9a7080;margin-top:4px}input,select,textarea{width:100%;padding:11px 12px;border:1px solid #f0e4e8;border-radius:10px;font:400 14px 'DM Sans',sans-serif;background:#fff}textarea{min-height:110px;resize:vertical}.form-nav{display:flex;justify-content:space-between;gap:12px;padding-top:16px;margin-top:20px;border-top:1px solid #f0e4e8}.repeat-group{display:flex;flex-direction:column;gap:10px;margin-bottom:10px}.repeat-row{display:grid;gap:8px;background:#fff;border:1px solid #f0e4e8;border-radius:12px;padding:12px}.memory-row{grid-template-columns:44px 1fr 30px}.reason-row{grid-template-columns:1fr 30px;align-items:center}.remove-btn,.add-btn{cursor:pointer}.remove-btn{width:28px;height:28px;border-radius:50%;border:1px solid #fca5a5;background:#fff5f5;color:#dc2626}.add-btn{width:100%;padding:10px;border:1px dashed #ffccd5;border-radius:10px;background:#fff0f3;color:#e63070}.photo-upload-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.photo-slot{aspect-ratio:1;border:2px dashed #f0e4e8;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;position:relative;background:#fff;overflow:hidden;cursor:pointer}.photo-slot.has-photo{border-style:solid;border-color:#ffccd5}.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.photo-slot input{display:none}.photo-slot-label{font-size:11px;color:#9a7080;z-index:1}.photo-remove{position:absolute;top:4px;right:4px;z-index:2;display:none;width:22px;height:22px;border:none;border-radius:50%;background:rgba(0,0,0,.6);color:#fff}.photo-slot.has-photo .photo-remove{display:block}.photo-progress{width:0;height:3px;background:#e63070;border-radius:999px}.photo-captions{display:flex;flex-direction:column;gap:8px;margin-top:10px}.save-status{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);padding:8px 16px;border-radius:999px;font-size:12px;opacity:0;transition:opacity .2s}.save-status.show{opacity:1}.save-status.saved{background:#d1fae5;color:#065f46}.save-status.saving{background:#fef3c7;color:#92400e}.save-status.error{background:#fee2e2;color:#991b1b}.photo-card,.memory-card{background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:16px;overflow:hidden}.tag{display:inline-flex;align-items:center;padding:7px 11px;border-radius:999px;background:#e63070;color:#fff;font-size:11px;line-height:1.3}.tag.subtle{background:rgba(0,0,0,.06);color:#4c3740}.empty-block{padding:14px;border:1px dashed rgba(0,0,0,.14);border-radius:14px;font-size:12px;color:#8b6f79;background:rgba(255,255,255,.7)}@media(max-width:860px){.layout{grid-template-columns:1fr}.preview-panel{display:none}}
+</style>
+</head>
+<body>
+<nav class="navbar">
+    <a href="dashboard.html" class="nav-logo">WishDrop</a>
+    <div class="nav-actions">
+        <button class="btn btn-ghost" type="button" onclick="openPreview()">Preview</button>
+        <button class="btn btn-primary" type="button" id="saveBtn" onclick="saveWish()">
+            <span id="saveBtnText">Save & Get Link</span>
+        </button>
+    </div>
+</nav>
+
+<div class="layout">
+    <div class="form-panel">
+        <div class="step-nav">
+            <div class="step-pill active" onclick="goStep(0)">1. Her Details</div>
+            <div class="step-pill" onclick="goStep(1)">2. Photos</div>
+            <div class="step-pill" onclick="goStep(2)">3. Wish Message</div>
+            <div class="step-pill" onclick="goStep(3)">4. Memories</div>
+            <div class="step-pill" onclick="goStep(4)">5. Reasons & Tags</div>
+        </div>
+        <div class="share-box" id="shareBox">
+            <div style="font-size:13px;font-weight:600">Your Share Link</div>
+            <p style="font-size:12px;color:#9a7080;margin-top:4px">Save the wish, then copy this link and send it to her.</p>
+            <div class="share-row">
+                <input class="share-input" id="shareLinkInput" type="text" readonly value="Save your wish to generate the share link"/>
+                <button class="share-copy-btn" type="button" onclick="copyShareLink()">Copy Link</button>
+            </div>
+        </div>
+<div class="form-section active" id="step-0">
+    <h2 class="section-title">Her Details</h2>
+    <p class="section-sub">Basic info about her and this wish.</p>
+    <div class="field">
+        <label>Occasion</label>
+        <select id="occasion">
+            <option value="birthday">Birthday</option>
+            <option value="anniversary">Anniversary</option>
+            <option value="valentines">Valentine's Day</option>
+            <option value="random">Just Because</option>
+        </select>
+    </div>
+    <div class="field">
+        <label>Her Name</label>
+        <input id="gfName" type="text" maxlength="30" placeholder="Priya"/>
+    </div><div class="field">
+        <label>Her Age</label>
+        <input id="gfAge" type="number" min="1" max="99" placeholder="22"/>
+    </div><div class="field">
+        <label>Her Date of Birth</label>
+        <input id="gfDob" type="date"/>
+    </div>
+    <div class="field">
+        <label>Your Name</label>
+        <input id="bfName" type="text" maxlength="30" placeholder="Aarav"/></div>
+        <div class="field">
+            <label>Wish Date</label>
+            <input id="wishDate" type="date"/></div>
+            <div class="form-nav">
+                <span></span>
+                <button class="btn btn-primary" type="button" onclick="goStep(1)">Next</button>
+            </div></div>
+<div class="form-section" id="step-1">
+    <h2 class="section-title">Your Photos</h2>
+    <p class="section-sub">Upload up to 5 photos.</p>
+    <div class="photo-upload-grid" id="photoGrid"></div>
+    <div style="height:4px;background:#f0e4e8;border-radius:999px;margin:10px 0 14px">
+        <div id="overallProgress" style="height:100%;width:0;background:#e63070;border-radius:999px">
+        </div>
+    </div>
+    <div class="field">
+        <label>Photo Captions</label>
+        <div class="photo-captions" id="photoCaptions">
+            </div>
+        </div>
+    <div class="form-nav">
+        <button class="btn btn-ghost" type="button" onclick="goStep(0)">Back</button>
+        <button class="btn btn-primary" type="button" onclick="goStep(2)">Next</button>
+    </div>
+</div>
+<div class="form-section" id="step-2">
+    <h2 class="section-title">Wish Message</h2>
+    <p class="section-sub">Write the main message here.</p>
+    <div class="field">
+        <label>Section heading</label>
+        <input id="wishSectionTitle" type="text" maxlength="50" placeholder="From my heart to yours"/></div>
+        <div class="field">
+            <label>Your wish message</label>
+            <textarea id="wishMessage" rows="8" placeholder="Write your message here..."></textarea>
+            <p class="field-hint" id="wishCharCount">0 / 800 characters</p>
+        </div>
+        <div class="field">
+            <label>Closing title</label>
+            <input id="closingTitle" type="text" maxlength="60" placeholder="Happy Birthday, Priya"/>
+        </div>
+        <div class="field">
+            <label>Closing subtitle</label>
+            <input id="closingSubtitle" type="text" maxlength="100" placeholder="This page was made just for you."/>
+        </div><div class="form-nav">
+            <button class="btn btn-ghost" type="button" onclick="goStep(1)">Back</button>
+            <button class="btn btn-primary" type="button" onclick="goStep(3)">Next</button>
+        </div>
+    </div>
+<div class="form-section" id="step-3">
+    <h2 class="section-title">Our Timeline</h2>
+    <p class="section-sub">Add up to 4 memories.</p>
+    <div class="field"><label>Section heading</label>
+        <input id="memoriesSectionTitle" type="text" maxlength="50" placeholder="How we got here"/>
+    </div>
+    <div class="repeat-group" id="memoriesGroup"></div>
+    <button class="add-btn" type="button" id="addMemoryBtn" onclick="addMemory()">+ Add a memory</button>
+    <div class="form-nav">
+        <button class="btn btn-ghost" type="button" onclick="goStep(2)">Back</button>
+        <button class="btn btn-primary" type="button" onclick="goStep(4)">Next</button>
+    </div>
+</div>
+<div class="form-section" id="step-4">
+    <h2 class="section-title">Reasons & Tags</h2>
+    <p class="section-sub">Why you love her and the vibe tags.</p>
+    <div class="field">
+        <label>Section heading</label>
+        <input id="reasonsSectionTitle" type="text" maxlength="50" placeholder="Why I love you"/>
+    </div>
+    <div class="repeat-group" id="reasonsGroup">
+         </div>
+         
+         <button class="add-btn" type="button" id="addReasonBtn" onclick="addReason()">+ Add a reason</button>
+         <div class="field" style="margin-top:18px">
+            <label>Vibe Tags</label>
+            <input id="tags" type="text" placeholder="my favourite human, best laugh, soft heart"/>
+            <p class="field-hint">Comma separated.</p>
+        </div>
+        <div class="form-nav">
+            <button class="btn btn-ghost" type="button" onclick="goStep(3)">Back</button>
+            <button class="btn btn-primary" type="button" onclick="saveWish()">Save & Get Link</button>
+        </div>
+    </div>
+</div>
+<div class="preview-panel">
+    <div class="preview-label">Live Preview</div>
+    <iframe id="previewIframe" title="Template preview">
+
+    </iframe>
+</div>
+</div>
+<div class="save-status" id="saveStatus"></div>
+
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script><script src="js/api.js"></script><script src="js/edit.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+# ── SECRET FILES — never commit these ──
+backend/.env
+backend/serviceAccountKey.json
+
+# ── Node modules ──
+backend/node_modules/
+node_modules/
+
+# ── OS files ──
+.DS_Store
+Thumbs.db

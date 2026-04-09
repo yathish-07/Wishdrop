@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WishDrop — For Ananya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,600;1,400;1,600&family=Syne:wght@400;500;700;800&family=Lato:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0c0c0f;
+      --bg2:       #131318;
+      --bg3:       #1a1a22;
+      --surface:   #1e1e28;
+      --border:    rgba(255,255,255,0.07);
+      --border2:   rgba(255,255,255,0.13);
+      --gold:      #c9a84c;
+      --gold-dim:  #8a6a28;
+      --gold-glow: rgba(201,168,76,0.15);
+      --text:      #f0ece4;
+      --muted:     #7a7670;
+      --muted2:    #a09890;
+      --accent:    #e8c97a;
+      --font-display: 'Bodoni Moda', serif;
+      --font-sans:    'Syne', sans-serif;
+      --font-body:    'Lato', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── STAR FIELD ── */
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle ease-in-out infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.1; transform: scale(1); }
+      50%       { opacity: 0.7; transform: scale(1.3); }
+    }
+
+    /* ── WATERMARK ── */
+    .watermark {
+      position: fixed;
+      bottom: 1rem;
+      right: 1.25rem;
+      font-family: var(--font-sans);
+      font-size: 10px;
+      color: var(--muted);
+      opacity: 0.5;
+      z-index: 999;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .watermark span { color: var(--gold); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      animation: glowPulse 4s ease-in-out infinite;
+    }
+
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+      50%       { opacity: 1;   transform: translate(-50%, -50%) scale(1.08); }
+    }
+
+    .hero-line-top {
+      width: 1px;
+      height: 80px;
+      background: linear-gradient(to bottom, transparent, var(--gold-dim));
+      margin: 0 auto 2.5rem;
+      animation: fadeDown 1s ease both;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2rem;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .hero-for {
+      font-family: var(--font-display);
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--muted2);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .hero-name {
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 14vw, 9rem);
+      font-weight: 600;
+      color: var(--text);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      animation: fadeUp 0.8s 0.4s ease both;
+      position: relative;
+    }
+
+    .hero-name::after {
+      content: attr(data-name);
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--accent) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      animation: nameShimmer 3s 1.5s ease-in-out infinite;
+    }
+
+    @keyframes nameShimmer {
+      0%, 100% { opacity: 0; }
+      50%       { opacity: 0.4; }
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      animation: fadeUp 0.8s 0.6s ease both;
+    }
+
+    .hero-meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--gold-dim);
+    }
+
+    .hero-from {
+      color: var(--gold);
+    }
+
+    .hero-line-bottom {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--gold-dim), transparent);
+      margin: 3rem auto 0;
+      animation: fadeUp 0.8s 0.8s ease both;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 400;
+      color: var(--text);
+      font-style: italic;
+    }
+
+    .section-rule {
+      width: 40px;
+      height: 1px;
+      background: var(--gold-dim);
+      margin: 1.25rem auto 0;
+    }
+
+    /* ── PHOTOS ── */
+    .photos-section {
+      position: relative;
+      padding: 6rem 1.5rem;
+      z-index: 1;
+    }
+
+    .photos-masonry {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 200px 200px;
+      grid-auto-rows: 200px;
+      gap: 8px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .photo-tile {
+      position: relative;
+      min-height: 180px;
+      border-radius: 4px;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      transition: transform 0.4s ease, border-color 0.3s ease;
+    }
+
+    .photo-tile:hover {
+      transform: scale(1.02);
+      border-color: var(--gold-dim);
+    }
+
+    .photo-tile.span2h { grid-column: span 2; }
+    .photo-tile.span2v { grid-row: span 2; }
+
+    .photo-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #1a1a22, #222230);
+    }
+
+    .photo-inner svg {
+      width: 28px;
+      height: 28px;
+      opacity: 0.2;
+    }
+
+    .photo-inner span {
+      font-family: var(--font-sans);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .photo-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 1rem 0.9rem 0.7rem;
+      background: linear-gradient(to top, rgba(12,12,15,0.9) 0%, transparent 100%);
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-style: italic;
+      color: rgba(240,236,228,0.75);
+    }
+
+    /* ── MESSAGE ── */
+    .message-section {
+      position: relative;
+      padding: 6rem 2rem;
+      z-index: 1;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .message-frame {
+      border: 1px solid var(--border2);
+      border-radius: 2px;
+      padding: 3rem 2.5rem;
+      position: relative;
+      background: var(--bg2);
+    }
+
+    .message-frame::before,
+    .message-frame::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: var(--gold-dim);
+      border-style: solid;
+    }
+
+    .message-frame::before {
+      top: -1px; left: -1px;
+      border-width: 1px 0 0 1px;
+    }
+
+    .message-frame::after {
+      bottom: -1px; right: -1px;
+      border-width: 0 1px 1px 0;
+    }
+
+    .message-quote {
+      font-family: var(--font-display);
+      font-size: 4rem;
+      color: var(--gold-dim);
+      line-height: 0.6;
+      margin-bottom: 1.5rem;
+      opacity: 0.5;
+    }
+
+    .message-text {
+      font-family: var(--font-display);
+      font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.9;
+      letter-spacing: 0.01em;
+    }
+
+    .message-text em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .message-sig {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .sig-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .sig-name {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    /* ── TIMELINE ── */
+    .timeline-section {
+      position: relative;
+      padding: 6rem 2rem;
+      z-index: 1;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--gold-dim) 20%, var(--gold-dim) 80%, transparent);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 0 0 2.5rem 2rem;
+    }
+
+    .timeline-item:last-child { padding-bottom: 0; }
+
+    .timeline-dot {
+      position: absolute;
+      left: -2rem;
+      top: 4px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1.5px solid var(--gold-dim);
+      transform: translateX(-4px);
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+
+    .timeline-item:hover .timeline-dot {
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .timeline-date {
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+
+    .timeline-title {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.02em;
+    }
+
+    .timeline-body {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--muted2);
+      line-height: 1.7;
+    }
+
+    /* ── REASONS ── */
+    .reasons-section {
+      padding: 6rem 1.5rem;
+      position: relative;
+      z-index: 1;
+      background: var(--bg2);
+    }
+
+    .reasons-inner {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .reasons-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .reason-cell {
+      padding: 2rem 1.75rem;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .reason-cell:nth-child(even) { border-right: none; }
+    .reason-cell:nth-last-child(-n+2) { border-bottom: none; }
+
+    .reason-cell::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold-glow);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .reason-cell:hover::before { opacity: 1; }
+
+    .reason-num {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 600;
+      color: rgba(201,168,76,0.12);
+      line-height: 1;
+      margin-bottom: 0.75rem;
+    }
+
+    .reason-text {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--muted2);
+      line-height: 1.75;
+    }
+
+    .reason-cell.featured {
+      background: var(--surface);
+      grid-column: span 2;
+      border-right: none;
+      text-align: center;
+      padding: 2.5rem 3rem;
+    }
+
+    .reason-cell.featured .reason-num {
+      font-size: 4rem;
+      color: rgba(201,168,76,0.18);
+    }
+
+    .reason-cell.featured .reason-text {
+      font-size: 16px;
+      color: var(--text);
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* ── CLOSING ── */
+    .closing-section {
+      position: relative;
+      padding: 8rem 2rem;
+      text-align: center;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .closing-glow {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .closing-symbol {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: var(--gold-dim);
+      margin-bottom: 2rem;
+      opacity: 0.6;
+      animation: rotateSlow 12s linear infinite;
+    }
+
+    @keyframes rotateSlow {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .closing-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 7vw, 4.5rem);
+      font-weight: 600;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .closing-sub {
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--muted2);
+      margin-bottom: 3rem;
+      max-width: 380px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7;
+    }
+
+    .closing-sub br { display: block; }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      color: var(--gold);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 1rem 2.5rem;
+      border-radius: 2px;
+      text-decoration: none;
+      border: 1px solid var(--gold-dim);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .download-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold-glow);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .download-btn:hover {
+      border-color: var(--gold);
+      color: var(--accent);
+    }
+
+    .download-btn:hover::before { opacity: 1; }
+
+    .download-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .download-note {
+      display: block;
+      margin-top: 1.25rem;
+      font-family: var(--font-sans);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      opacity: 0.3;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border2);
+    }
+
+    .divider-icon {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--gold-dim);
+      font-style: italic;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: scaleY(0); transform-origin: top; }
+      to   { opacity: 1; transform: scaleY(1); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 560px) {
+      .photos-masonry {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: none;
+        grid-auto-rows: 170px;
+      }
+      .photo-tile.span2h { grid-column: span 2; }
+      .photo-tile.span2v { grid-row: span 1; }
+      .photo-tile { min-height: 170px; }
+      .reasons-grid { grid-template-columns: 1fr; }
+      .reason-cell.featured { grid-column: span 1; }
+      .reason-cell:nth-child(even) { border-right: none; }
+      .message-frame { padding: 2rem 1.5rem; }
+    }
+
+    /* ── EDIT MODE ── */
+    [contenteditable] { outline: none; border-radius: 6px; transition: background 0.2s, box-shadow 0.2s; cursor: text; }
+    [contenteditable]:hover { background: rgba(201,168,76,0.08); box-shadow: 0 0 0 2px rgba(201,168,76,0.3); }
+    [contenteditable]:focus { background: rgba(201,168,76,0.12); box-shadow: 0 0 0 2px #c9a84c; }
+    .edit-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: #131318; border-bottom: 2px solid #3d2c1a;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.6rem 1.5rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+      transform: translateY(-100%);
+      transition: transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .edit-bar.visible { transform: translateY(0); }
+    .edit-bar-left { display: flex; align-items: center; gap: 10px; }
+    .edit-bar-icon { width: 30px; height: 30px; border-radius: 8px; background: rgba(201,168,76,0.15); display: flex; align-items: center; justify-content: center; }
+    .edit-bar-icon svg { width: 14px; height: 14px; stroke: #c9a84c; }
+    .edit-bar-label { font-family: 'Syne',sans-serif; font-size: 13px; font-weight: 700; color: #f0ece4; }
+    .edit-bar-sub   { font-family: 'Lato',sans-serif; font-size: 11px; color: #7a7670; }
+    .edit-bar-right { display: flex; align-items: center; gap: 8px; }
+    .btn-done { display:inline-flex; align-items:center; gap:6px; background:transparent; color:#c9a84c; font-family:'Syne',sans-serif; font-size:12px; font-weight:700; padding:6px 18px; border-radius:50px; border:1px solid #8a6a28; cursor:pointer; transition:all 0.2s; }
+    .btn-done:hover { background: rgba(201,168,76,0.15); }
+    .btn-done svg { width:12px; height:12px; }
+    .btn-reset { display:inline-flex; align-items:center; gap:6px; background:transparent; color:#7a7670; font-family:'Syne',sans-serif; font-size:12px; font-weight:700; padding:6px 14px; border-radius:50px; border:1px solid rgba(255,255,255,0.1); cursor:pointer; transition:all 0.2s; }
+    .btn-reset:hover { color:#f0ece4; border-color:rgba(255,255,255,0.2); }
+    .btn-reset svg { width:12px; height:12px; }
+    .edit-hint { position:fixed; bottom:2.5rem; left:50%; transform:translateX(-50%) translateY(10px); background:#f0ece4; color:#1a0a10; font-family:'Lato',sans-serif; font-size:12px; padding:8px 20px; border-radius:50px; z-index:999; pointer-events:none; opacity:0; transition:opacity 0.3s, transform 0.3s; white-space:nowrap; }
+    .edit-hint.show { opacity:1; transform:translateX(-50%) translateY(0); }
+    body.editing { padding-top: 54px; }
+  </style>
+</head>
+<body>
+
+  <!-- Stars -->
+  <div class="stars" id="stars"></div>
+
+  <!-- Edit toolbar -->
+  <div class="edit-bar" id="editBar">
+    <div class="edit-bar-left">
+      <div class="edit-bar-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+      <div><div class="edit-bar-label">Editing your wish page</div><div class="edit-bar-sub">Click any text to change it</div></div>
+    </div>
+    <div class="edit-bar-right">
+      <button class="btn-reset" onclick="resetAll()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Reset</button>
+      <button class="btn-done" onclick="doneEditing()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Done</button>
+    </div>
+  </div>
+  <div class="edit-hint" id="editHint">✏️ &nbsp; tap any text to edit it</div>
+
+  <!-- Watermark -->
+  <div class="watermark">made with <span>WishDrop</span></div>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-line-top"></div>
+
+    <p class="hero-eyebrow" contenteditable="true" spellcheck="false">✦ &nbsp; A Birthday Letter &nbsp; ✦</p>
+    <p class="hero-for">this page was made for</p>
+
+    <h1 class="hero-name"  contenteditable="true" spellcheck="false">Ananya</h1>
+
+    <div class="hero-meta">
+      <span contenteditable="true" spellcheck="false">March 27, 2026</span>
+      <div class="hero-meta-dot"></div>
+      <span contenteditable="true" spellcheck="false">Her 25th</span>
+      <div class="hero-meta-dot"></div>
+      <span class="hero-from" contenteditable="true" spellcheck="false">from Vikram</span>
+    </div>
+
+    <div class="hero-line-bottom"></div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-icon">✦</div><div class="divider-line"></div></div>
+
+  <!-- ── PHOTOS ── -->
+  <section class="photos-section">
+    <div class="section-header">
+      <p class="section-eyebrow">our story in frames</p>
+      <h2 class="section-title" contenteditable="true" spellcheck="false">Moments I Kept</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="photos-masonry">
+      <div class="photo-tile span2h">
+        <div class="photo-inner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+          <span>Photo 1</span>
+        </div>
+        <div class="photo-overlay" contenteditable="true" spellcheck="false">The night everything changed</div>
+      </div>
+
+      <div class="photo-tile span2v">
+        <div class="photo-inner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+          <span>Photo 2</span>
+        </div>
+        <div class="photo-overlay" contenteditable="true" spellcheck="false">Somewhere we found each other</div>
+      </div>
+
+      <div class="photo-tile">
+        <div class="photo-inner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+          <span>Photo 3</span>
+        </div>
+        <div class="photo-overlay" contenteditable="true" spellcheck="false">You laughed first</div>
+      </div>
+
+      <div class="photo-tile">
+        <div class="photo-inner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+          <span>Photo 4</span>
+        </div>
+        <div class="photo-overlay" contenteditable="true" spellcheck="false">Still my favourite view</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-icon">✦</div><div class="divider-line"></div></div>
+
+  <!-- ── MESSAGE ── -->
+  <section class="message-section">
+    <div class="section-header">
+      <p class="section-eyebrow">a letter for you</p>
+      <h2 class="section-title" contenteditable="true" spellcheck="false">What I Want You to Know</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="message-frame">
+      <div class="message-quote">"</div>
+      <p class="message-text" contenteditable="true" spellcheck="false">
+        Five years, and you still surprise me.
+        The way you walk into a room and somehow
+        make it feel <em>warmer</em>. The way you
+        remember every small thing I've said and hold
+        it like it matters.
+        <br/><br/>
+        I used to think love was something
+        you fell into. You taught me it's something
+        you <em>choose</em>, every single morning,
+        without even thinking twice.
+        <br/><br/>
+        Happy Birthday, Ananya.
+        You are my favourite choice.
+      </p>
+      <div class="message-sig">
+        <div class="sig-line"></div>
+        <span class="sig-name" contenteditable="true" spellcheck="false">Vikram</span>
+        <div class="sig-line"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-icon">✦</div><div class="divider-line"></div></div>
+
+  <!-- ── TIMELINE ── -->
+  <section class="timeline-section">
+    <div class="section-header">
+      <p class="section-eyebrow">how we got here</p>
+      <h2 class="section-title" contenteditable="true" spellcheck="false">Our Timeline</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date" contenteditable="true" spellcheck="false">October 2021</div>
+        <div class="timeline-title" contenteditable="true" spellcheck="false">The First Hello</div>
+        <p class="timeline-body" contenteditable="true" spellcheck="false">A mutual friend's rooftop. You were talking to someone else and I spent the entire evening trying to think of something worth saying to you.</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date" contenteditable="true" spellcheck="false">December 2021</div>
+        <div class="timeline-title" contenteditable="true" spellcheck="false">The Long Walk</div>
+        <p class="timeline-body" contenteditable="true" spellcheck="false">We walked for three hours after that dinner and forgot to check the time. That was when I knew this was different.</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date" contenteditable="true" spellcheck="false">February 2022</div>
+        <div class="timeline-title" contenteditable="true" spellcheck="false">You Said Yes</div>
+        <p class="timeline-body" contenteditable="true" spellcheck="false">The most important word you've ever said to me. I still replay it sometimes when things feel ordinary, just to remind myself they're not.</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date" contenteditable="true" spellcheck="false">March 2026</div>
+        <div class="timeline-title" contenteditable="true" spellcheck="false">Today</div>
+        <p class="timeline-body" contenteditable="true" spellcheck="false">Your 25th. Five years in. Still the person I want to tell everything to, first.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-icon">✦</div><div class="divider-line"></div></div>
+
+  <!-- ── REASONS ── -->
+  <section class="reasons-section">
+    <div class="reasons-inner">
+      <div class="section-header">
+        <p class="section-eyebrow">just so you know</p>
+        <h2 class="section-title" contenteditable="true" spellcheck="false">Why You, Always</h2>
+        <div class="section-rule"></div>
+      </div>
+
+      <div class="reasons-grid">
+        <div class="reason-cell">
+          <div class="reason-num">01</div>
+          <p class="reason-text" contenteditable="true" spellcheck="false">The way you argue with me when you know I'm wrong, even when it would be easier to stay quiet.</p>
+        </div>
+        <div class="reason-cell">
+          <div class="reason-num">02</div>
+          <p class="reason-text" contenteditable="true" spellcheck="false">How you fall asleep mid-sentence on the phone and still apologise like it was something terrible.</p>
+        </div>
+        <div class="reason-cell">
+          <div class="reason-num">03</div>
+          <p class="reason-text" contenteditable="true" spellcheck="false">You make ordinary Tuesdays feel like something worth remembering.</p>
+        </div>
+        <div class="reason-cell">
+          <div class="reason-num">04</div>
+          <p class="reason-text" contenteditable="true" spellcheck="false">The version of me I am when I'm around you is my favourite version.</p>
+        </div>
+        <div class="reason-cell featured">
+          <div class="reason-num">05</div>
+          <p class="reason-text" contenteditable="true" spellcheck="false">After everything — every argument, every distance, every hard month — you are still the first person I want to call.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CLOSING ── -->
+  <section class="closing-section">
+    <div class="closing-glow"></div>
+
+    <div class="closing-symbol">✦</div>
+
+    <h2 class="closing-title" contenteditable="true" spellcheck="false">Happy Birthday,<br/>Ananya.</h2>
+    <p class="closing-sub" contenteditable="true" spellcheck="false">
+      This page was made just for you.<br/>
+      Keep it. Read it on a hard day.
+    </p>
+
+    <a href="#" class="download-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Download as PDF — ₹10
+    </a>
+    <span class="download-note">one-time · instant · yours forever</span>
+  </section>
+
+  <script>
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      const size = Math.random() * 2 + 0.5;
+      star.style.cssText = `width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-duration:${Math.random()*4+2}s;animation-delay:${Math.random()*5}s;`;
+      starsContainer.appendChild(star);
+    }
+
+    const API_BASE   = 'http://localhost:4000/api';
+    const editBar    = document.getElementById('editBar');
+    const editHint   = document.getElementById('editHint');
+    const isEditMode = false;
+    const wishId     = new URLSearchParams(window.location.search).get('id') || null;
+
+    function f(cls)   { return document.querySelector(`.${cls}`); }
+    function all(cls) { return Array.from(document.querySelectorAll(`.${cls}`)); }
+
+    function extractWishData() {
+      return {
+        templateNo:   2, templateName: 'Midnight',
+        gfName:       f('hero-name')?.innerText.trim(),
+        heroEyebrow:  f('hero-eyebrow')?.innerText.trim(),
+        heroDate:     document.querySelector('.hero-meta span:first-child')?.innerText.trim(),
+        heroAge:      document.querySelector('.hero-meta span:nth-child(3)')?.innerText.trim(),
+        bfName:       f('hero-from')?.innerText.trim(),
+        sigName:      f('sig-name')?.innerText.trim(),
+        photosSectionTitle:    all('section-title')[0]?.innerText.trim(),
+        messageSectionTitle:   all('section-title')[1]?.innerText.trim(),
+        timelineSectionTitle:  all('section-title')[2]?.innerText.trim(),
+        reasonsSectionTitle:   all('section-title')[3]?.innerText.trim(),
+        wishMessage:  f('message-text')?.innerHTML.trim(),
+        closingTitle: f('closing-title')?.innerHTML.trim(),
+        closingSubtitle: f('closing-sub')?.innerText.trim(),
+        photoCaptions: all('photo-overlay').map(el => el.innerText.trim()),
+        memories:     all('timeline-item').map(item => ({
+                        date:  item.querySelector('.timeline-date')?.innerText.trim(),
+                        title: item.querySelector('.timeline-title')?.innerText.trim(),
+                        body:  item.querySelector('.timeline-body')?.innerText.trim()
+                      })),
+        reasons:      all('reason-text').map(el => el.innerText.trim()).filter(Boolean)
+      };
+    }
+
+    function populateDom(wish) {
+      const setText = (cls, val) => { const el = f(cls); if (el && val) el.innerText = val; };
+      const setHTML = (cls, val) => { const el = f(cls); if (el && val) el.innerHTML = val; };
+      setText('hero-name', wish.gfName);
+      setText('hero-eyebrow', wish.heroEyebrow);
+      setText('hero-from', wish.bfName);
+      setText('sig-name', wish.sigName || wish.bfName);
+      setHTML('message-text', wish.wishMessage);
+      setHTML('closing-title', wish.closingTitle);
+      setText('closing-sub', wish.closingSubtitle);
+      const metaSpans = document.querySelectorAll('.hero-meta span');
+      if (metaSpans[0] && wish.heroDate) metaSpans[0].innerText = wish.heroDate;
+      if (metaSpans[2] && wish.heroAge)  metaSpans[2].innerText = wish.heroAge;
+      const sTitles = all('section-title');
+      [wish.photosSectionTitle, wish.messageSectionTitle, wish.timelineSectionTitle, wish.reasonsSectionTitle]
+        .forEach((t, i) => { if (sTitles[i] && t) sTitles[i].innerText = t; });
+
+      all('photo-inner').forEach((el, i) => {
+        if (!wish.photos?.[i]) return;
+        el.style.backgroundImage = `url('${wish.photos[i]}')`;
+        el.style.backgroundSize = 'cover';
+        el.style.backgroundPosition = 'center';
+        el.style.backgroundRepeat = 'no-repeat';
+        const svg = el.querySelector('svg');
+        const span = el.querySelector('span');
+        if (svg) svg.style.display = 'none';
+        if (span) span.style.display = 'none';
+      });
+
+      all('photo-overlay').forEach((el, i) => { if (wish.photoCaptions?.[i]) el.innerText = wish.photoCaptions[i]; });
+      all('timeline-item').forEach((item, i) => {
+        const m = wish.memories?.[i]; if (!m) return;
+        const d = item.querySelector('.timeline-date');
+        const t = item.querySelector('.timeline-title');
+        const b = item.querySelector('.timeline-body');
+        if (d) d.innerText = m.date || ''; if (t) t.innerText = m.title || ''; if (b) b.innerText = m.body || '';
+      });
+      all('reason-text').forEach((el, i) => { if (wish.reasons?.[i]) el.innerText = wish.reasons[i]; });
+    }
+
+    const fields = document.querySelectorAll('[contenteditable]');
+    fields.forEach(field => {
+      field.removeAttribute('contenteditable');
+      field.style.cursor = 'default';
+    });
+    editBar.style.display = 'none';
+    editHint.style.display = 'none';
+
+    const token = new URLSearchParams(window.location.search).get('token');
+    if (token) loadSharedWish(token);
+
+    async function loadSharedWish(token) {
+      try {
+        const res = await fetch(`${API_BASE}/share/${token}`);
+        const data = await res.json();
+        if (data.wish) populateDom(data.wish);
+        else document.body.innerHTML = '<div style="text-align:center;padding:4rem;font-family:serif;color:#f0ece4;background:#0c0c0f;min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;"><h2>This wish has expired ✦</h2><p style="color:#7a7670;margin-top:0.5rem">Wish pages are only active for 2 days.</p></div>';
+      } catch (e) { console.error('Share load error:', e); }
+    }
+  </script>
+</body>
+</html>

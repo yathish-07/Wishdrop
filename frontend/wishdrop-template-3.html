@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WishDrop — For Riya ✨</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --lavender:     #c084fc;
+      --lavender-light: #f3e8ff;
+      --lavender-mid: #e9d5ff;
+      --mint:         #6ee7b7;
+      --mint-light:   #d1fae5;
+      --pink:         #f472b6;
+      --pink-light:   #fce7f3;
+      --pink-mid:     #fbcfe8;
+      --peach:        #fdba74;
+      --peach-light:  #fff7ed;
+      --sky:          #7dd3fc;
+      --sky-light:    #e0f2fe;
+      --bg:           #faf7ff;
+      --white:        #ffffff;
+      --dark:         #2d1a4a;
+      --muted:        #9b8aaa;
+      --muted2:       #c4b5d4;
+      --font-display: 'Nunito', sans-serif;
+      --font-body:    'Outfit', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--dark);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── FLOATING BUBBLES ── */
+    .bubbles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0;
+      animation: floatUp linear infinite;
+    }
+
+    .bubble:nth-child(1)  { width:10px; height:10px; left:5%;  background:#f9a8d4; animation-duration:12s; animation-delay:0s;  }
+    .bubble:nth-child(2)  { width:7px;  height:7px;  left:15%; background:#c084fc; animation-duration:9s;  animation-delay:2s;  }
+    .bubble:nth-child(3)  { width:12px; height:12px; left:25%; background:#6ee7b7; animation-duration:14s; animation-delay:4s;  }
+    .bubble:nth-child(4)  { width:8px;  height:8px;  left:38%; background:#7dd3fc; animation-duration:10s; animation-delay:1s;  }
+    .bubble:nth-child(5)  { width:11px; height:11px; left:52%; background:#f9a8d4; animation-duration:13s; animation-delay:6s;  }
+    .bubble:nth-child(6)  { width:6px;  height:6px;  left:63%; background:#c084fc; animation-duration:8s;  animation-delay:3s;  }
+    .bubble:nth-child(7)  { width:9px;  height:9px;  left:74%; background:#fdba74; animation-duration:11s; animation-delay:7s;  }
+    .bubble:nth-child(8)  { width:13px; height:13px; left:84%; background:#6ee7b7; animation-duration:15s; animation-delay:5s;  }
+    .bubble:nth-child(9)  { width:7px;  height:7px;  left:92%; background:#7dd3fc; animation-duration:9s;  animation-delay:9s;  }
+    .bubble:nth-child(10) { width:10px; height:10px; left:45%; background:#f9a8d4; animation-duration:12s; animation-delay:8s;  }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(110vh) scale(1);    opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.3; }
+      100% { transform: translateY(-20px) scale(1.1); opacity: 0; }
+    }
+
+    /* ── WATERMARK ── */
+    .watermark {
+      position: fixed;
+      bottom: 1rem;
+      right: 1.25rem;
+      font-family: var(--font-body);
+      font-size: 11px;
+      color: var(--muted2);
+      z-index: 999;
+      letter-spacing: 0.05em;
+    }
+    .watermark span { color: var(--lavender); font-weight: 600; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+    }
+
+    /* Big soft blobs in background */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.35;
+    }
+
+    .blob-1 { width: 400px; height: 400px; background: #e9d5ff; top: -100px; left: -100px; animation: blobDrift 8s ease-in-out infinite; }
+    .blob-2 { width: 350px; height: 350px; background: #fbcfe8; top: 10%;   right: -80px;  animation: blobDrift 10s ease-in-out infinite reverse; }
+    .blob-3 { width: 300px; height: 300px; background: #d1fae5; bottom: 5%; left: 20%;     animation: blobDrift 12s ease-in-out infinite 2s; }
+    .blob-4 { width: 250px; height: 250px; background: #e0f2fe; bottom: 15%; right: 10%;   animation: blobDrift 9s ease-in-out infinite 4s; }
+
+    @keyframes blobDrift {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33%       { transform: translate(20px, -20px) scale(1.05); }
+      66%       { transform: translate(-15px, 15px) scale(0.97); }
+    }
+
+    /* Sticker pill at top */
+    .hero-sticker {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      border: 2px solid var(--lavender-mid);
+      border-radius: 50px;
+      padding: 7px 18px;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--lavender);
+      margin-bottom: 2rem;
+      animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+      letter-spacing: 0.01em;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.7); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .hero-for {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+      animation: fadeUp 0.7s 0.2s ease both;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-name {
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 14vw, 8rem);
+      font-weight: 800;
+      line-height: 0.95;
+      margin-bottom: 1rem;
+      animation: fadeUp 0.7s 0.3s ease both;
+      background: linear-gradient(135deg, #c084fc 0%, #f472b6 40%, #fb923c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-age-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--lavender-light);
+      border: 2px solid var(--lavender-mid);
+      border-radius: 50px;
+      padding: 6px 20px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--lavender);
+      margin-bottom: 1rem;
+      animation: fadeUp 0.7s 0.4s ease both;
+    }
+
+    .hero-from {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--muted);
+      animation: fadeUp 0.7s 0.5s ease both;
+      letter-spacing: 0.08em;
+    }
+
+    .hero-from strong {
+      color: var(--pink);
+      font-weight: 600;
+    }
+
+    /* Floating emoji stickers */
+    .emoji-float {
+      position: absolute;
+      font-size: 2rem;
+      animation: emojiFloat ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .e1 { top: 15%; left: 8%;  animation-duration: 4s;  animation-delay: 0s;   font-size: 1.8rem; }
+    .e2 { top: 20%; right: 10%; animation-duration: 5s;  animation-delay: 1s;   font-size: 2.2rem; }
+    .e3 { top: 60%; left: 5%;  animation-duration: 3.5s; animation-delay: 0.5s; font-size: 1.5rem; }
+    .e4 { top: 55%; right: 7%; animation-duration: 4.5s; animation-delay: 2s;   font-size: 1.8rem; }
+    .e5 { top: 80%; left: 15%; animation-duration: 6s;   animation-delay: 1.5s; font-size: 1.3rem; }
+    .e6 { top: 75%; right: 12%; animation-duration: 3s;  animation-delay: 3s;   font-size: 1.6rem; }
+
+    @keyframes emojiFloat {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50%       { transform: translateY(-12px) rotate(5deg); }
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      animation: fadeUp 1s 1s ease both;
+    }
+
+    .scroll-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .scroll-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--lavender-mid);
+      animation: dotBounce 1.2s ease-in-out infinite;
+    }
+
+    .scroll-dot:nth-child(2) { animation-delay: 0.15s; }
+    .scroll-dot:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes dotBounce {
+      0%, 100% { transform: translateY(0); opacity: 0.4; }
+      50%       { transform: translateY(-5px); opacity: 1; }
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .section-pill {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 0.75rem;
+    }
+
+    .pill-purple { background: var(--lavender-light); color: var(--lavender); border: 1.5px solid var(--lavender-mid); }
+    .pill-pink   { background: var(--pink-light);     color: var(--pink);     border: 1.5px solid var(--pink-mid); }
+    .pill-mint   { background: var(--mint-light);     color: #059669;         border: 1.5px solid #a7f3d0; }
+    .pill-peach  { background: var(--peach-light);    color: #ea580c;         border: 1.5px solid #fed7aa; }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      color: var(--dark);
+      line-height: 1.1;
+    }
+
+    /* ── PHOTOS ── */
+    .photos-section {
+      padding: 5rem 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .photos-bento {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 160px 160px;
+      gap: 10px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .photo-tile {
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.3s ease;
+      border: 2px solid white;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+
+    .photo-tile:hover { transform: scale(1.03) rotate(1deg); }
+
+    .photo-tile.wide { grid-column: span 2; }
+    .photo-tile.tall { grid-row: span 2; }
+
+    .photo-inner {
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .photo-inner svg { width: 24px; height: 24px; opacity: 0.25; }
+    .photo-inner span {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.4;
+    }
+
+    /* Bento color tiles */
+    .tile-1 { background: linear-gradient(135deg, #fce7f3, #f3e8ff); }
+    .tile-1 svg, .tile-1 span { color: #c084fc; }
+    .tile-2 { background: linear-gradient(135deg, #d1fae5, #e0f2fe); }
+    .tile-2 svg, .tile-2 span { color: #059669; }
+    .tile-3 { background: linear-gradient(135deg, #fef3c7, #fce7f3); }
+    .tile-3 svg, .tile-3 span { color: #d97706; }
+    .tile-4 { background: linear-gradient(135deg, #e0f2fe, #f3e8ff); }
+    .tile-4 svg, .tile-4 span { color: #0284c7; }
+    .tile-5 { background: linear-gradient(135deg, #f3e8ff, #fce7f3); }
+    .tile-5 svg, .tile-5 span { color: #db2777; }
+
+    .photo-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 0.5rem 0.75rem;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(4px);
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    /* ── WISH CARD ── */
+    .wish-section {
+      padding: 4rem 1.5rem;
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .wish-card {
+      background: white;
+      border-radius: 28px;
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(192,132,252,0.15);
+      border: 2px solid var(--lavender-mid);
+    }
+
+    .wish-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: linear-gradient(to right, #c084fc, #f472b6, #fb923c, #6ee7b7, #7dd3fc);
+    }
+
+    .wish-card-emoji {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .wish-text {
+      font-family: var(--font-display);
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      font-weight: 600;
+      color: var(--dark);
+      line-height: 1.8;
+    }
+
+    .wish-text em {
+      font-style: normal;
+      color: var(--lavender);
+      background: var(--lavender-light);
+      padding: 1px 6px;
+      border-radius: 6px;
+    }
+
+    .wish-text .pink-em {
+      color: var(--pink);
+      background: var(--pink-light);
+      padding: 1px 6px;
+      border-radius: 6px;
+    }
+
+    .wish-sign {
+      margin-top: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sign-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--lavender), var(--pink));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .sign-name {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .sign-sub {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    /* ── MEMORIES ── */
+    .memories-section {
+      padding: 4rem 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .memories-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .memory-card {
+      background: white;
+      border-radius: 20px;
+      padding: 1.5rem;
+      border: 2px solid transparent;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .memory-card:hover { transform: translateY(-4px); }
+
+    .memory-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .mc-1 { border-color: var(--lavender-mid); }
+    .mc-1::after { background: linear-gradient(to right, #c084fc, #f472b6); }
+
+    .mc-2 { border-color: #a7f3d0; }
+    .mc-2::after { background: linear-gradient(to right, #6ee7b7, #7dd3fc); }
+
+    .mc-3 { border-color: var(--pink-mid); }
+    .mc-3::after { background: linear-gradient(to right, #f472b6, #fb923c); }
+
+    .mc-4 { border-color: #fed7aa; }
+    .mc-4::after { background: linear-gradient(to right, #fdba74, #fde68a); }
+
+    .memory-emoji {
+      font-size: 1.8rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .memory-date {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      margin-bottom: 0.3rem;
+    }
+
+    .memory-title {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 0.4rem;
+    }
+
+    .memory-body {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── REASONS ── */
+    .reasons-section {
+      padding: 4rem 1.5rem;
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .reasons-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .reason-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: white;
+      border-radius: 16px;
+      padding: 1.1rem 1.25rem;
+      border: 2px solid var(--lavender-mid);
+      transition: all 0.25s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .reason-row:hover {
+      border-color: var(--lavender);
+      transform: translateX(4px);
+      box-shadow: 0 4px 16px rgba(192,132,252,0.15);
+    }
+
+    .reason-row:nth-child(2n) { border-color: var(--pink-mid); }
+    .reason-row:nth-child(2n):hover { border-color: var(--pink); box-shadow: 0 4px 16px rgba(244,114,182,0.15); }
+    .reason-row:nth-child(3n) { border-color: #a7f3d0; }
+    .reason-row:nth-child(3n):hover { border-color: var(--mint); box-shadow: 0 4px 16px rgba(110,231,183,0.15); }
+
+    .reason-num-badge {
+      width: 32px; height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--lavender-light), var(--pink-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--lavender);
+      flex-shrink: 0;
+    }
+
+    .reason-text {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--dark);
+      line-height: 1.6;
+      padding-top: 4px;
+    }
+
+    /* ── TAGS SECTION ── */
+    .tags-section {
+      padding: 3rem 1.5rem;
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .tags-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+    }
+
+    .tag {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 7px 16px;
+      border-radius: 50px;
+      border: 2px solid;
+      transition: transform 0.2s ease;
+      cursor: default;
+    }
+
+    .tag:hover { transform: scale(1.05) rotate(-1deg); }
+
+    .tag-purple { background: var(--lavender-light); color: var(--lavender);    border-color: var(--lavender-mid); }
+    .tag-pink   { background: var(--pink-light);     color: var(--pink);        border-color: var(--pink-mid); }
+    .tag-mint   { background: var(--mint-light);     color: #059669;            border-color: #a7f3d0; }
+    .tag-peach  { background: var(--peach-light);    color: #ea580c;            border-color: #fed7aa; }
+    .tag-sky    { background: var(--sky-light);      color: #0284c7;            border-color: #bae6fd; }
+
+    /* ── CLOSING ── */
+    .closing-section {
+      position: relative;
+      padding: 6rem 1.5rem 8rem;
+      text-align: center;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .closing-bg {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse 70% 60% at 30% 50%, #f3e8ff 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 70% 50%, #fce7f3 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 50% 80%, #d1fae5 0%, transparent 60%);
+    }
+
+    .closing-stickers {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .closing-sticker {
+      background: white;
+      border-radius: 50px;
+      padding: 6px 14px;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      border: 2px solid var(--lavender-mid);
+      color: var(--lavender);
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+
+    .closing-sticker:nth-child(2) { animation-delay: 0.1s; border-color: var(--pink-mid); color: var(--pink); }
+    .closing-sticker:nth-child(3) { animation-delay: 0.2s; border-color: #a7f3d0; color: #059669; }
+
+    .closing-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 7vw, 4rem);
+      font-weight: 800;
+      color: var(--dark);
+      line-height: 1.1;
+      margin-bottom: 0.75rem;
+    }
+
+    .closing-title .gradient-text {
+      background: linear-gradient(135deg, #c084fc, #f472b6, #fb923c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .closing-sub {
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      max-width: 360px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #c084fc, #f472b6);
+      color: white;
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      padding: 0.9rem 2.2rem;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      box-shadow: 0 4px 20px rgba(192,132,252,0.4);
+    }
+
+    .download-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(192,132,252,0.5);
+    }
+
+    .download-btn svg { width: 16px; height: 16px; }
+
+    .download-note {
+      display: block;
+      margin-top: 1rem;
+      font-size: 12px;
+      color: var(--muted2);
+      font-family: var(--font-body);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── EDITABLE STYLES ── */
+    [contenteditable] {
+      outline: none;
+      border-radius: 8px;
+      transition: background 0.2s ease, box-shadow 0.2s ease;
+      cursor: text;
+    }
+
+    [contenteditable]:hover {
+      background: rgba(192,132,252,0.07);
+      box-shadow: 0 0 0 2px rgba(192,132,252,0.2);
+    }
+
+    [contenteditable]:focus {
+      background: rgba(192,132,252,0.1);
+      box-shadow: 0 0 0 2px var(--lavender);
+    }
+
+    /* edit toolbar */
+    .edit-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: white;
+      border-bottom: 2px solid var(--lavender-mid);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 1.5rem;
+      gap: 1rem;
+      box-shadow: 0 2px 12px rgba(192,132,252,0.12);
+      transform: translateY(-100%);
+      transition: transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+
+    .edit-bar.visible { transform: translateY(0); }
+
+    .edit-bar-left { display: flex; align-items: center; gap: 10px; }
+
+    .edit-bar-icon {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      background: var(--lavender-light);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .edit-bar-icon svg { width: 14px; height: 14px; stroke: var(--lavender); }
+
+    .edit-bar-label {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .edit-bar-sub {
+      font-family: var(--font-body);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .edit-bar-right { display: flex; align-items: center; gap: 8px; }
+
+    .btn-done {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #c084fc, #f472b6);
+      color: white;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 18px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-done:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(192,132,252,0.4); }
+    .btn-done svg { width: 12px; height: 12px; }
+
+    .btn-reset {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--lavender-light);
+      color: var(--lavender);
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 50px;
+      border: 2px solid var(--lavender-mid);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-reset:hover { background: var(--lavender-mid); }
+    .btn-reset svg { width: 12px; height: 12px; }
+
+    /* floating hint */
+    .edit-hint {
+      position: fixed;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: var(--dark);
+      color: white;
+      font-family: var(--font-body);
+      font-size: 12px;
+      padding: 8px 20px;
+      border-radius: 50px;
+      z-index: 999;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .edit-hint.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* dim all non-editable when in edit mode */
+    body.editing [contenteditable]:not(:focus) {
+      box-shadow: 0 0 0 1.5px rgba(192,132,252,0.25);
+    }
+
+    body.editing { padding-top: 54px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 560px) {
+      .photos-bento {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto;
+      }
+      .photo-tile.wide { grid-column: span 2; }
+      .photo-tile.tall { grid-row: span 1; }
+      .memories-grid { grid-template-columns: 1fr; }
+      .emoji-float { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Edit toolbar -->
+  <div class="edit-bar" id="editBar">
+    <div class="edit-bar-left">
+      <div class="edit-bar-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <div>
+        <div class="edit-bar-label">Editing your wish page</div>
+        <div class="edit-bar-sub">Click any text to change it</div>
+      </div>
+    </div>
+    <div class="edit-bar-right">
+      <button class="btn-reset" onclick="resetAll()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        Reset
+      </button>
+      <button class="btn-done" onclick="doneEditing()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Done
+      </button>
+    </div>
+  </div>
+
+  <!-- Edit hint -->
+  <div class="edit-hint" id="editHint">✏️ &nbsp; tap any text to edit it</div>
+
+  <!-- Bubbles -->
+  <div class="bubbles">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+  </div>
+
+  <!-- Watermark -->
+  <div class="watermark">made with <span>WishDrop</span> ✨</div>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+      <div class="blob blob-4"></div>
+    </div>
+
+    <!-- floating emojis -->
+    <span class="emoji-float e1">🌸</span>
+    <span class="emoji-float e2">✨</span>
+    <span class="emoji-float e3">💜</span>
+    <span class="emoji-float e4">🦋</span>
+    <span class="emoji-float e5">🌷</span>
+    <span class="emoji-float e6">💫</span>
+
+    <div class="hero-sticker" contenteditable="true" spellcheck="false" data-field="heroSticker">🎂 &nbsp; it's her birthday!</div>
+
+    <p class="hero-for">this whole page is for</p>
+
+    <h1 class="hero-name" contenteditable="true" spellcheck="false" data-field="gfName">Riya</h1>
+
+    <div class="hero-age-pill" contenteditable="true" spellcheck="false" data-field="agePill">🎉 turning 20 today 🎉</div>
+
+    <p class="hero-from">made with so much love by <strong contenteditable="true" spellcheck="false" data-field="bfName">Dev</strong> 💕</p>
+    <p class="hero-from" style="margin-top:4px; font-size:11px;">March 27, 2026</p>
+
+    <div class="hero-scroll">
+      <div class="scroll-dots">
+        <div class="scroll-dot"></div>
+        <div class="scroll-dot"></div>
+        <div class="scroll-dot"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PHOTOS ── -->
+  <section class="photos-section">
+    <div class="section-header">
+      <div class="section-pill pill-purple">📸 our photos</div>
+      <h2 class="section-title" contenteditable="true" spellcheck="false" data-field="photosSectionTitle">Moments that live rent-free in my head</h2>
+    </div>
+
+    <div class="photos-bento">
+      <div class="photo-tile wide tile-1">
+        <div class="photo-inner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span>photo 1</span>
+        </div>
+        <div class="photo-caption">our first photo together 🌸</div>
+      </div>
+
+      <div class="photo-tile tall tile-2">
+        <div class="photo-inner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span>photo 2</span>
+        </div>
+        <div class="photo-caption">the best day 💚</div>
+      </div>
+
+      <div class="photo-tile tile-3">
+        <div class="photo-inner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span>photo 3</span>
+        </div>
+        <div class="photo-caption">silly us 🧡</div>
+      </div>
+
+      <div class="photo-tile tile-4">
+        <div class="photo-inner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span>photo 4</span>
+        </div>
+        <div class="photo-caption">this one's my fav 💙</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WISH ── -->
+  <section class="wish-section">
+    <div class="section-header">
+      <div class="section-pill pill-pink">💌 the wish</div>
+      <h2 class="section-title" contenteditable="true" spellcheck="false">From my heart to yours</h2>
+    </div>
+
+    <div class="wish-card">
+      <span class="wish-card-emoji" contenteditable="true" spellcheck="false">💜</span>
+      <p class="wish-text" contenteditable="true" spellcheck="false">
+        Being with you is my <em>favourite thing</em>.
+        Not just on birthdays — every boring Tuesday,
+        every late night voice note, every random
+        <span class="pink-em">drive to nowhere</span>.
+        <br/><br/>
+        You make everything feel softer and brighter
+        and honestly I didn't know life could feel
+        this <em>easy</em> until I had you in it.
+        <br/><br/>
+        Happy 20th, Riya. Here's to you. 🎂
+      </p>
+      <div class="wish-sign">
+        <div class="sign-avatar">D</div>
+        <div>
+          <div class="sign-name" contenteditable="true" spellcheck="false">Dev</div>
+          <div class="sign-sub" contenteditable="true" spellcheck="false">your person 💕</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MEMORIES ── -->
+  <section class="memories-section">
+    <div class="section-header">
+      <div class="section-pill pill-mint">🌿 our timeline</div>
+      <h2 class="section-title" contenteditable="true" spellcheck="false">How we got here</h2>
+    </div>
+
+    <div class="memories-grid">
+      <div class="memory-card mc-1">
+        <span class="memory-emoji" contenteditable="true" spellcheck="false">👀</span>
+        <div class="memory-date" contenteditable="true" spellcheck="false">June 2025</div>
+        <div class="memory-title" contenteditable="true" spellcheck="false">The First Time</div>
+        <p class="memory-body" contenteditable="true" spellcheck="false">You walked in and I genuinely forgot what I was saying mid-sentence. Not my smoothest moment.</p>
+      </div>
+
+      <div class="memory-card mc-2">
+        <span class="memory-emoji" contenteditable="true" spellcheck="false">🧋</span>
+        <div class="memory-date" contenteditable="true" spellcheck="false">July 2025</div>
+        <div class="memory-title" contenteditable="true" spellcheck="false">Boba Date</div>
+        <p class="memory-body" contenteditable="true" spellcheck="false">3 hours. We talked for 3 hours. I missed my bus. I didn't care one bit.</p>
+      </div>
+
+      <div class="memory-card mc-3">
+        <span class="memory-emoji" contenteditable="true" spellcheck="false">🌧️</span>
+        <div class="memory-date" contenteditable="true" spellcheck="false">August 2025</div>
+        <div class="memory-title" contenteditable="true" spellcheck="false">That Rainy Evening</div>
+        <p class="memory-body" contenteditable="true" spellcheck="false">We got stuck in the rain outside that café and you laughed so hard at my umbrella situation.</p>
+      </div>
+
+      <div class="memory-card mc-4">
+        <span class="memory-emoji" contenteditable="true" spellcheck="false">🎂</span>
+        <div class="memory-date" contenteditable="true" spellcheck="false">March 2026</div>
+        <div class="memory-title" contenteditable="true" spellcheck="false">Right Now</div>
+        <p class="memory-body" contenteditable="true" spellcheck="false">Your 20th. I made you this whole page because you deserve more than just a text.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── REASONS ── -->
+  <section class="reasons-section">
+    <div class="section-header">
+      <div class="section-pill pill-peach">🧡 why you</div>
+      <h2 class="section-title" contenteditable="true" spellcheck="false">reasons i'm obsessed with you</h2>
+    </div>
+
+    <div class="reasons-list">
+      <div class="reason-row">
+        <div class="reason-num-badge">01</div>
+        <p class="reason-text" contenteditable="true" spellcheck="false">The way you get genuinely excited about small things. It's contagious and it's everything.</p>
+      </div>
+      <div class="reason-row">
+        <div class="reason-num-badge">02</div>
+        <p class="reason-text" contenteditable="true" spellcheck="false">You remember things I said weeks ago and bring them up at the perfect moment.</p>
+      </div>
+      <div class="reason-row">
+        <div class="reason-num-badge">03</div>
+        <p class="reason-text" contenteditable="true" spellcheck="false">Your voice notes are always exactly what I needed to hear, even when you think you're rambling.</p>
+      </div>
+      <div class="reason-row">
+        <div class="reason-num-badge">04</div>
+        <p class="reason-text" contenteditable="true" spellcheck="false">You make me feel like the most interesting person in the room. Nobody has ever done that before.</p>
+      </div>
+      <div class="reason-row">
+        <div class="reason-num-badge">05</div>
+        <p class="reason-text" contenteditable="true" spellcheck="false">Genuinely can't imagine the last 9 months without you. You became my person so fast.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TAGS ── -->
+  <section class="tags-section">
+    <div class="section-header">
+      <div class="section-pill pill-purple">✨ vibes</div>
+      <h2 class="section-title" contenteditable="true" spellcheck="false">things that are just you</h2>
+    </div>
+
+    <div class="tags-cloud">
+      <span class="tag tag-purple" contenteditable="true" spellcheck="false">main character energy</span>
+      <span class="tag tag-pink" contenteditable="true" spellcheck="false">the funniest person ever</span>
+      <span class="tag tag-mint" contenteditable="true" spellcheck="false">always knows what to say</span>
+      <span class="tag tag-peach" contenteditable="true" spellcheck="false">best laugh in every room</span>
+      <span class="tag tag-sky" contenteditable="true" spellcheck="false">overthinks but it's cute</span>
+      <span class="tag tag-purple" contenteditable="true" spellcheck="false">too kind for this world</span>
+      <span class="tag tag-pink" contenteditable="true" spellcheck="false">makes everywhere feel cozy</span>
+      <span class="tag tag-mint" contenteditable="true" spellcheck="false">obsessed with boba</span>
+      <span class="tag tag-peach" contenteditable="true" spellcheck="false">sleepy before 10pm</span>
+      <span class="tag tag-sky" contenteditable="true" spellcheck="false">my favourite human</span>
+    </div>
+  </section>
+
+  <!-- ── CLOSING ── -->
+  <section class="closing-section">
+    <div class="closing-bg"></div>
+
+    <div class="closing-stickers">
+      <span class="closing-sticker">💜 love you</span>
+      <span class="closing-sticker">🎂 happy birthday</span>
+      <span class="closing-sticker">✨ you're it</span>
+    </div>
+
+    <h2 class="closing-title">
+      happy birthday<br/>
+      <span class="gradient-text" contenteditable="true" spellcheck="false">Riya 🎉</span>
+    </h2>
+
+    <p class="closing-sub" contenteditable="true" spellcheck="false">
+      save this page, screenshot it, come back to it
+      on a hard day. it'll still be here. 💕
+    </p>
+
+    <a href="#" class="download-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Download as PDF — ₹10
+    </a>
+    <span class="download-note">one-time · instant · yours forever ✨</span>
+  </section>
+
+  <script>
+    const API_BASE   = 'http://localhost:4000/api';
+    const editBar    = document.getElementById('editBar');
+    const editHint   = document.getElementById('editHint');
+    const isEditMode = false;
+    const wishId     = new URLSearchParams(window.location.search).get('id') || null;
+
+    // ── FIELD MAP ──
+    // Maps a key name → how to find its element(s) on the page
+    // This is how we extract structured data from the template DOM
+    const FIELD_MAP = {
+      gfName:              () => f('hero-name')?.innerText.trim(),
+      bfName:              () => f('sign-name')?.innerText.trim(),
+      agePill:             () => f('hero-age-pill')?.innerText.trim(),
+      heroSticker:         () => f('hero-sticker')?.innerText.trim(),
+      wishSectionTitle:    () => sectionTitles()[0],
+      memoriesSectionTitle:() => sectionTitles()[1],
+      reasonsSectionTitle: () => sectionTitles()[2],
+      tagsSectionTitle:    () => sectionTitles()[3],
+      wishMessage:         () => f('wish-text')?.innerHTML.trim(),
+      wishEmoji:           () => f('wish-card-emoji')?.innerText.trim(),
+      signSub:             () => f('sign-sub')?.innerText.trim(),
+      closingTitle:        () => f('gradient-text')?.innerText.trim(),
+      closingSubtitle:     () => f('closing-sub')?.innerText.trim(),
+      photoCaptions:       () => all('photo-caption').map(el => el.innerText.trim()),
+      memories:            () => all('memory-card').map(card => ({
+                                   emoji: card.querySelector('.memory-emoji')?.innerText.trim(),
+                                   date:  card.querySelector('.memory-date')?.innerText.trim(),
+                                   title: card.querySelector('.memory-title')?.innerText.trim(),
+                                   body:  card.querySelector('.memory-body')?.innerText.trim()
+                                 })),
+      reasons:             () => all('reason-text').map(el => el.innerText.trim()).filter(Boolean),
+      tags:                () => all('tag').map(el => el.innerText.trim()).filter(Boolean),
+    };
+
+    // Helpers
+    function f(cls)   { return document.querySelector(`.${cls}`); }
+    function all(cls) { return Array.from(document.querySelectorAll(`.${cls}`)); }
+    function sectionTitles() { return all('section-title').map(el => el.innerText.trim()); }
+
+    // ── EXTRACT ALL DATA FROM DOM ──
+    function extractWishData() {
+      const data = { templateNo: 3, templateName: 'Pastel Dream' };
+      for (const [key, getter] of Object.entries(FIELD_MAP)) {
+        try { data[key] = getter(); } catch (e) { data[key] = null; }
+      }
+      return data;
+    }
+
+    // ── POPULATE DOM FROM SAVED DATA ──
+    // Used when bf re-opens an existing wish in edit mode
+    function populateDom(wish) {
+      const set = (cls, val) => { const el = f(cls); if (el && val) el.innerHTML = val; };
+      const setText = (cls, val) => { const el = f(cls); if (el && val) el.innerText = val; };
+
+      setText('hero-name',       wish.gfName);
+      setText('sign-name',       wish.bfName);
+      setText('hero-age-pill',   wish.agePill);
+      setText('hero-sticker',    wish.heroSticker);
+      setText('wish-card-emoji', wish.wishEmoji);
+      setText('sign-sub',        wish.signSub);
+      setText('gradient-text',   wish.closingTitle);
+      setText('closing-sub',     wish.closingSubtitle);
+      set('wish-text',           wish.wishMessage);
+
+      // Section titles
+      const titles = all('section-title');
+      const stMap  = [wish.wishSectionTitle, wish.memoriesSectionTitle, wish.reasonsSectionTitle, wish.tagsSectionTitle];
+      titles.forEach((el, i) => { if (stMap[i]) el.innerText = stMap[i]; });
+
+      all('photo-inner').forEach((el, i) => {
+        if (!wish.photos?.[i]) return;
+        el.style.backgroundImage = `url('${wish.photos[i]}')`;
+        el.style.backgroundSize = 'cover';
+        el.style.backgroundPosition = 'center';
+        el.style.backgroundRepeat = 'no-repeat';
+        const svg = el.querySelector('svg');
+        const span = el.querySelector('span');
+        if (svg) svg.style.display = 'none';
+        if (span) span.style.display = 'none';
+      });
+
+      // Photo captions
+      if (wish.photoCaptions) {
+        all('photo-caption').forEach((el, i) => {
+          if (wish.photoCaptions[i]) el.innerText = wish.photoCaptions[i];
+        });
+      }
+
+      // Memories
+      if (wish.memories) {
+        all('memory-card').forEach((card, i) => {
+          const m = wish.memories[i];
+          if (!m) return;
+          const emoji = card.querySelector('.memory-emoji');
+          const date  = card.querySelector('.memory-date');
+          const title = card.querySelector('.memory-title');
+          const body  = card.querySelector('.memory-body');
+          if (emoji) emoji.innerText = m.emoji  || '';
+          if (date)  date.innerText  = m.date   || '';
+          if (title) title.innerText = m.title  || '';
+          if (body)  body.innerText  = m.body   || '';
+        });
+      }
+
+      // Reasons
+      if (wish.reasons) {
+        all('reason-text').forEach((el, i) => {
+          if (wish.reasons[i]) el.innerText = wish.reasons[i];
+        });
+      }
+
+      // Tags
+      if (wish.tags) {
+        all('tag').forEach((el, i) => {
+          if (wish.tags[i]) el.innerText = wish.tags[i];
+        });
+      }
+    }
+
+    // ── SAVE TO BACKEND ──
+    const fields = document.querySelectorAll('[contenteditable]');
+
+    fields.forEach(f => { f.removeAttribute('contenteditable'); f.style.cursor = 'default'; });
+    editBar.style.display = 'none';
+    editHint.style.display = 'none';
+
+    const token = new URLSearchParams(window.location.search).get('token');
+    if (token) loadSharedWish(token);
+
+    // ── LOAD SHARED WISH (read-only / gf view) ──
+    async function loadSharedWish(token) {
+      try {
+        const res  = await fetch(`${API_BASE}/share/${token}`);
+        const data = await res.json();
+        if (data.wish) populateDom(data.wish);
+        else document.body.innerHTML = '<div style="text-align:center;padding:4rem;font-family:sans-serif;"><h2>This wish has expired 💔</h2><p>Wish pages are only active for 2 days.</p></div>';
+      } catch (e) { console.error('Failed to load shared wish:', e); }
+    }
+  </script>
+</body>
+</html>

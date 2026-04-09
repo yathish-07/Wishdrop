@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WishDrop — Choose Your Template</title>
+  <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #fdfaf8;
+      --dark:       #1a0a10;
+      --rose:       #e63070;
+      --rose-light: #fff0f3;
+      --rose-mid:   #ffccd5;
+      --muted:      #9a7080;
+      --surface:    #ffffff;
+      --border:     #f0e4e8;
+      --font-display: 'Yeseva One', serif;
+      --font-serif:   'Cormorant Garamond', serif;
+      --font-sans:    'DM Sans', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--dark);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(253,250,248,0.95);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--rose);
+      text-decoration: none;
+    }
+
+    .nav-steps {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .nav-steps .active { color: var(--rose); font-weight: 500; }
+    .step-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--border); }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      text-align: center;
+      padding: 3.5rem 2rem 2.5rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .page-hero-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--rose);
+      background: var(--rose-light);
+      border: 1px solid var(--rose-mid);
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 1.25rem;
+    }
+
+    .page-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--dark);
+      margin-bottom: 0.6rem;
+    }
+
+    .page-hero p {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    /* ── CARDS GRID ── */
+    .cards-section {
+      padding: 2rem 2rem 3rem;
+      animation: fadeUp 0.6s 0.15s ease both;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── TEMPLATE CARD ── */
+    .template-card {
+      border-radius: 20px;
+      overflow: visible;
+      border: 2.5px solid var(--border);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      cursor: pointer;
+      position: relative;
+      background: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+
+    /* Zoom OUT on hover — card grows, others shrink slightly */
+    .template-card:hover {
+      transform: scale(1.04);
+      border-color: var(--rose-mid);
+      box-shadow: 0 16px 48px rgba(230,48,112,0.16);
+      z-index: 10;
+    }
+
+    .cards-grid:has(.template-card:hover) .template-card:not(:hover) {
+      transform: scale(0.97);
+      opacity: 0.75;
+    }
+
+    .template-card.selected {
+      border-color: var(--rose);
+      box-shadow: 0 12px 40px rgba(230,48,112,0.2);
+    }
+
+    .template-card.selected .card-select-btn {
+      background: var(--rose);
+      color: white;
+      border-color: var(--rose);
+    }
+
+    /* ── SELECTED BADGE ── */
+    .selected-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--rose);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.4);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 20;
+    }
+
+    .selected-badge svg { width: 12px; height: 12px; stroke: white; }
+    .template-card.selected .selected-badge { opacity: 1; transform: scale(1); }
+
+    /* ── IFRAME WINDOW ── */
+    .iframe-window {
+      position: relative;
+      width: 100%;
+      height: 440px;
+      overflow: hidden;
+      background: #f5f5f5;
+      border-radius: 18px 18px 0 0;
+    }
+
+    .iframe-window iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1024px;
+      height: calc(440px * 1024 / 320);
+      border: none;
+      transform-origin: top left;
+      transform: scale(calc(320 / 1024));
+      pointer-events: none;
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* On card hover, slightly scroll the iframe preview down for more reveal */
+    .template-card:hover .iframe-window iframe {
+      transform: scale(calc(320 / 1024)) translateY(-30px);
+    }
+
+    /* Click overlay */
+    .iframe-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      cursor: pointer;
+    }
+
+    /* Shimmer loader */
+    .iframe-loading {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, #f5f5f5 25%, #eeecec 50%, #f5f5f5 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .iframe-loading.hidden { display: none; }
+
+    .loading-text {
+      font-size: 11px;
+      color: #bbb;
+      font-family: var(--font-sans);
+      letter-spacing: 0.08em;
+    }
+
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* ── CARD FOOTER ── */
+    .card-footer {
+      padding: 1rem 1.25rem 1.25rem;
+      background: white;
+      border-top: 1px solid var(--border);
+      border-radius: 0 0 18px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .card-info { flex: 1; }
+
+    .card-name {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--dark);
+      margin-bottom: 2px;
+    }
+
+    .card-desc {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    .card-select-btn {
+      padding: 0.5rem 1.1rem;
+      border-radius: 8px;
+      border: 1.5px solid var(--rose-mid);
+      background: transparent;
+      color: var(--rose);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-select-btn:hover { background: var(--rose-light); }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center;
+      padding: 0 2rem 4rem;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    .cta-selected-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--rose-light);
+      border: 1px solid var(--rose-mid);
+      border-radius: 50px;
+      padding: 6px 16px 6px 10px;
+      font-size: 13px;
+      color: var(--rose);
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      font-family: var(--font-sans);
+      transition: all 0.3s ease;
+    }
+
+    .cta-pill-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--rose); }
+
+    .cta-main-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--rose);
+      color: white;
+      font-family: var(--font-sans);
+      font-size: 15px;
+      font-weight: 500;
+      padding: 0.9rem 2.5rem;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+
+    .cta-main-btn:hover {
+      background: #c9184a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(230,48,112,0.35);
+    }
+
+    .cta-main-btn svg { width: 16px; height: 16px; }
+    .cta-note { display: block; margin-top: 0.75rem; font-size: 12px; color: var(--muted); }
+
+    /* ── PREVIEW LINK ── */
+    .preview-full-row {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .preview-full-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      font-family: var(--font-sans);
+      color: var(--muted);
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .preview-full-btn:hover {
+      color: var(--rose);
+      border-color: var(--rose-mid);
+      background: var(--rose-light);
+    }
+
+    .preview-full-btn svg { width: 12px; height: 12px; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 720px;
+      }
+      .template-card:last-child {
+        grid-column: 1 / -1;
+        max-width: 340px;
+        margin: 0 auto;
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .nav { padding: 1rem 1.25rem; }
+      .nav-steps { display: none; }
+      .cards-grid {
+        grid-template-columns: 1fr;
+        max-width: 360px;
+      }
+      .template-card:last-child {
+        grid-column: auto;
+        max-width: none;
+      }
+      .cards-grid:has(.template-card:hover) .template-card:not(:hover) {
+        transform: none;
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">WishDrop</a>
+    <div class="nav-steps">
+      <span class="active">① Pick template</span>
+      <div class="step-dot"></div>
+      <span>② Add photos</span>
+      <div class="step-dot"></div>
+      <span>③ Write wish</span>
+      <div class="step-dot"></div>
+      <span>④ Share</span>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="page-hero-tag">Step 1 of 4</div>
+    <h1>Choose Your Template</h1>
+    <p>Pick the vibe that feels like your love story.</p>
+  </div>
+
+  <!-- CARDS GRID -->
+  <div class="cards-section">
+    <div class="cards-grid">
+
+      <!-- CARD 1: Rose Petal -->
+      <div class="template-card selected" data-index="0">
+        <div class="selected-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="iframe-window">
+          <div class="iframe-loading" id="load0">
+            <span class="loading-text">Loading preview...</span>
+          </div>
+          <iframe
+            src="wishdrop-template.html"
+            scrolling="no"
+            onload="iframeLoaded(0)"
+            title="Rose Petal preview">
+          </iframe>
+          <div class="iframe-overlay" onclick="selectCard(0)"></div>
+        </div>
+        <div class="card-footer">
+          <div class="card-info">
+            <div class="card-name">Rose Petal</div>
+            <div class="card-desc">Soft, romantic & cheerful</div>
+          </div>
+          <button class="card-select-btn" onclick="selectCard(0)">✓ Selected</button>
+        </div>
+      </div>
+
+      <!-- CARD 2: Midnight -->
+      <div class="template-card" data-index="1">
+        <div class="selected-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="iframe-window">
+          <div class="iframe-loading" id="load1">
+            <span class="loading-text">Loading preview...</span>
+          </div>
+          <iframe
+            src="wishdrop-template-2.html"
+            scrolling="no"
+            onload="iframeLoaded(1)"
+            title="Midnight preview">
+          </iframe>
+          <div class="iframe-overlay" onclick="selectCard(1)"></div>
+        </div>
+        <div class="card-footer">
+          <div class="card-info">
+            <div class="card-name">Midnight</div>
+            <div class="card-desc">Dark, cinematic & intimate</div>
+          </div>
+          <button class="card-select-btn" onclick="selectCard(1)">Select this</button>
+        </div>
+      </div>
+
+      <!-- CARD 3: Pastel Dream -->
+      <div class="template-card" data-index="2">
+        <div class="selected-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="iframe-window">
+          <div class="iframe-loading" id="load2">
+            <span class="loading-text">Loading preview...</span>
+          </div>
+          <iframe
+            src="wishdrop-template-3.html"
+            scrolling="no"
+            onload="iframeLoaded(2)"
+            title="Pastel Dream preview">
+          </iframe>
+          <div class="iframe-overlay" onclick="selectCard(2)"></div>
+        </div>
+        <div class="card-footer">
+          <div class="card-info">
+            <div class="card-name">Pastel Dream</div>
+            <div class="card-desc">Playful, bright & Gen-Z</div>
+          </div>
+          <button class="card-select-btn" onclick="selectCard(2)">Select this</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PREVIEW LINK -->
+  <div class="preview-full-row">
+    <a href="wishdrop-template.html" class="preview-full-btn" id="previewLink" target="_blank">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Open full preview in new tab
+    </a>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <div class="cta-selected-pill">
+      <div class="cta-pill-dot"></div>
+      <span id="ctaText">Rose Petal selected</span>
+    </div>
+    <br/>
+    <a href="#" class="cta-main-btn" id="useTemplateBtn">
+      Use This Template
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <span class="cta-note">you can change this later</span>
+  </div>
+
+  <script>
+    const templates = ['Rose Petal', 'Midnight', 'Pastel Dream'];
+    const templateFiles = ['wishdrop-template.html', 'wishdrop-template-2.html', 'wishdrop-template-3.html'];
+    const templateIds = [1, 2, 3];
+    const cards = document.querySelectorAll('.template-card');
+    const selectBtns = document.querySelectorAll('.card-select-btn');
+    const ctaText = document.getElementById('ctaText');
+    const previewLink = document.getElementById('previewLink');
+    const useTemplateBtn = document.getElementById('useTemplateBtn');
+    let selectedIndex = 0;
+
+    function updateCta(index) {
+      useTemplateBtn.href = `edit.html?template=${templateIds[index]}&name=${encodeURIComponent(templates[index])}`;
+    }
+
+    function selectCard(index) {
+      selectedIndex = index;
+      cards.forEach((card, i) => {
+        card.classList.toggle('selected', i === index);
+        selectBtns[i].textContent = i === index ? 'Selected' : 'Select this';
+      });
+      ctaText.textContent = `${templates[index]} selected`;
+      previewLink.href = templateFiles[index];
+      updateCta(index);
+    }
+
+    function iframeLoaded(index) {
+      const loader = document.getElementById(`load${index}`);
+      if (loader) loader.classList.add('hidden');
+    }
+
+    updateCta(selectedIndex);
+
+
+  </script>
+
+</body>
+</html>

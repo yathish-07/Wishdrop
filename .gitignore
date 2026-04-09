@@ -1,0 +1,30 @@
+# dependencies
+node_modules/
+
+# env and secrets
+.env
+*.env
+backend/.env
+backend/serviceAccountKey.json
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# local build/cache
+dist/
+build/
+.cache/
+.vercel/
+
+# runtime files
+*.pid
+*.seed
+*.pid.lock
