@@ -2,7 +2,7 @@
 // Only the Firebase public config lives here (safe to expose)
 // All secrets stay on the backend server
 
-const API_BASE = 'http://localhost:4000/api';
+const API_BASE = '${window.location.origin}/api';
 
 // ── FIREBASE PUBLIC CONFIG ──
 // These are safe to expose — Firebase Security Rules protect your data
