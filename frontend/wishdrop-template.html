@@ -235,6 +235,16 @@
 
     function f(cls)   { return document.querySelector(`.${cls}`); }
     function all(cls) { return Array.from(document.querySelectorAll(`.${cls}`)); }
+    function hasItems(items, fields = []) {
+      return Array.isArray(items) && items.some((item) => {
+        if (typeof item === 'string') return item.trim();
+        if (!item || typeof item !== 'object') return false;
+        return fields.some((field) => String(item[field] || '').trim());
+      });
+    }
+    function removeIfEmpty(selector, isEmpty) {
+      if (isEmpty) document.querySelector(selector)?.remove();
+    }
 
     // ── EXTRACT DATA FROM DOM ──
     function extractWishData() {
@@ -267,6 +277,9 @@
     function populateDom(wish) {
       const setText = (cls, val) => { const el = f(cls); if (el && val !== undefined) el.innerText = val; };
       const setHTML = (cls, val) => { const el = f(cls); if (el && val !== undefined) el.innerHTML = val; };
+      removeIfEmpty('.photos-section', !hasItems(wish.photos));
+      removeIfEmpty('.memories-section', !hasItems(wish.memories, ['emoji', 'date', 'title', 'body']));
+      removeIfEmpty('.reasons-section', !hasItems(wish.reasons));
 
       // Hero name — it's a text node inside h1
       const nameSpan = f('hero-names')?.querySelector('span:not(.to):not(.name-from)');

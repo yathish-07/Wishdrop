@@ -176,8 +176,8 @@ function checkMemoryLimit() {
 function buildDefaultReasons() {
   const group = document.getElementById('reasonsGroup');
   if (!group || group.children.length) return;
-  addReason('The way you laugh with your whole face.');
-  addReason('You make ordinary days feel special.');
+  addReason('');
+  addReason('');
 }
 
 function addReason(text = '') {
