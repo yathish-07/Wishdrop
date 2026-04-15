@@ -351,6 +351,11 @@
     const token = new URLSearchParams(window.location.search).get('token');
     if (token) loadSharedWish(token);
 
+    document.querySelector('.download-btn')?.addEventListener('click', (event) => {
+      event.preventDefault();
+      window.parent.postMessage({ type: 'WISHDROP_DOWNLOAD_PDF' }, window.location.origin);
+    });
+
     async function loadSharedWish(token) {
       try {
         const res  = await fetch(`${API_BASE}/share/${token}`);
