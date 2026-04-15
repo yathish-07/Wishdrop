@@ -46,6 +46,30 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
+function toDateValue(value) {
+  if (!value) return null;
+  if (typeof value.toDate === 'function') return value.toDate();
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function serializeWishForOwner(id, wish) {
+  const createdAt = toDateValue(wish.createdAt);
+  const updatedAt = toDateValue(wish.updatedAt);
+  const expiresAt = toDateValue(wish.expiresAt);
+  const isExpired = !expiresAt || expiresAt <= new Date() || wish.isExpired === true;
+
+  return {
+    id,
+    ...wish,
+    createdAt: createdAt ? createdAt.toISOString() : null,
+    updatedAt: updatedAt ? updatedAt.toISOString() : null,
+    expiresAt: expiresAt ? expiresAt.toISOString() : null,
+    isExpired,
+    isActive: Boolean(expiresAt && expiresAt > new Date() && !isExpired)
+  };
+}
+
 // ── RAZORPAY INIT ──
 // Secret key stays on server ONLY
 const razorpay = new Razorpay({
@@ -127,13 +151,27 @@ app.get('/api/users/me', verifyToken, async (req, res) => {
       .where('uid', '==', uid)
       .get();
 
+    const now = new Date();
+    const expiredRefs = [];
+
     const wishes = wishesSnap.docs
-      .map(d => ({ id: d.id, ...d.data() }))
+      .map((d) => {
+        const wish = d.data();
+        const expiresAt = toDateValue(wish.expiresAt);
+        if (expiresAt && expiresAt <= now && wish.isExpired !== true) {
+          expiredRefs.push(d.ref);
+        }
+        return serializeWishForOwner(d.id, wish);
+      })
       .sort((a, b) => {
-        const aMs = a.createdAt?.toDate?.()?.getTime?.() || new Date(a.createdAt || 0).getTime() || 0;
-        const bMs = b.createdAt?.toDate?.()?.getTime?.() || new Date(b.createdAt || 0).getTime() || 0;
+        const aMs = new Date(a.createdAt || 0).getTime() || 0;
+        const bMs = new Date(b.createdAt || 0).getTime() || 0;
         return bMs - aMs;
       });
+
+    if (expiredRefs.length) {
+      await Promise.all(expiredRefs.map((ref) => ref.update({ isExpired: true })));
+    }
 
     res.json({ user: userSnap.data(), wishes });
   } catch (err) {
@@ -248,6 +286,7 @@ app.post('/api/wishes', verifyToken, async (req, res) => {
       gfName,
       gfAge,
       gfDob,
+      bfName,
 
       // Wish content
       wishes,
@@ -279,9 +318,8 @@ app.post('/api/wishes', verifyToken, async (req, res) => {
     // Generate unique share token
     const shareToken = crypto.randomBytes(16).toString('hex');
 
-    // Expiry = 2 days from now
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 2);
+    // Expiry = exactly 48 hours from creation
+    const expiresAt = new Date(Date.now() + (2 * 24 * 60 * 60 * 1000));
 
     // Share URL points directly to the template with token
     // GF opens this → template loads in read-only mode → fetches data from backend
@@ -290,7 +328,7 @@ app.post('/api/wishes', verifyToken, async (req, res) => {
     const wishData = {
       // Owner
       uid,
-      bfName:       userData.displayName,
+      bfName:       (bfName || '').trim() || userData.displayName || 'Someone special',
       bfEmail:      userData.email,
 
       // Template
@@ -358,7 +396,7 @@ app.get('/api/wishes/:wishId', verifyToken, async (req, res) => {
     const wish = wishSnap.data();
     if (wish.uid !== req.user.uid) return res.status(403).json({ error: 'Forbidden' });
 
-    res.json({ wish: { id: wishSnap.id, ...wish } });
+    res.json({ wish: serializeWishForOwner(wishSnap.id, wish) });
   } catch (err) {
     res.status(500).json({ error: 'Failed to get wish' });
   }
@@ -382,6 +420,7 @@ app.put('/api/wishes/:wishId', verifyToken, async (req, res) => {
 
     const allowed = [
       'gfName','gfAge','gfDob','occasion',
+      'bfName',
       'wishes','wishMessage','memories','reasons','tags',
       'photoCaptions','sectionTitles','closingTitle','closingSubtitle',
       'photos','templateNo','templateName'
